@@ -9,41 +9,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 URL = "https://testes.codefolio.com.br/"
 
-# Chave do localStorage
-FBASE_KEY = "firebase:authUser:AIzaSyARn2qVrSSndFu9JSo5mexrQCMxmORZzCg:[DEFAULT]"
-
-# Minha value 
-FBASE_VALUE = {
-  "apiKey": "AIzaSyARn2qVrSSndFu9JSo5mexrQCMxmORZzCg",
-  "appName": "[DEFAULT]",
-  "createdAt": "1760400650585",
-  "displayName": "Izabel de Oliveira Boaventura",
-  "email": "izabelboaventura.aluno@unipampa.edu.br",
-  "emailVerified": True,
-  "isAnonymous": False,
-  "lastLoginAt": "1762626262963",
-  "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocJI6RV84xezcRbUUKCZYIPnBQjwcWKXGRYosRZ37Kx7hi0cRw=s96-c",
-  "providerData": [
-    {
-      "providerId": "google.com",
-      "uid": "104672506054660683732",
-      "displayName": "Izabel de Oliveira Boaventura",
-      "email": "izabelboaventura.aluno@unipampa.edu.br",
-      "phoneNumber": None,
-      "photoURL": "https://lh3.googleusercontent.com/a/ACg8ocJI6RV84xezcRbUUKCZYIPnBQjwcWKXGRYosRZ37Kx7hi0cRw=s96-c"
-    }
-  ],
-  "stsTokenManager": {
-    # AccessToken completo
-    "accessToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjU0NTEzMjA5OWFkNmJmNjEzODJiNmI0Y2RlOWEyZGZlZDhjYjMwZjAiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiSXphYmVsIGRlIE9saXZlaXJhIEJvYXZlbnR1cmEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSkk2UlY4NHhlemNSYlVVS0NaWUlQbkJRandjV0tYR1JZb3NSWjM3S3g3aGkwY1J3PXM5Ni1jIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL3JlYWN0LW5hLXByYXRpY2EiLCJhdWQiOiJyZWFjdC1uYS1wcmF0aWNhIiwiYXV0aF90aW1lIjoxNzYyNjI2MjYyLCJ1c2VyX2lkIjoiZDVxbllIM2UyWll5bE5tVFY4UVA0d2dlNlQ2MiIsInN1YiI6ImQ1cW5ZSDNlMlpZeWxObVRWOFFQNHdnZTZUNjIiLCJpYXQiOjE3NjI2MjYyNjIsImV4cCI6MTc2MjYyOTg2MiwiZW1haWwiOiJpemFiZWxib2F2ZW50dXJhLmFsdW5vQHVuaXBhbXBhLmVkdS5iciIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Imdvb2dsZS5jb20iOlsiMTA0NjcyNTA2MDU0NjYwNjgzNzMyIl0sImVtYWlsIjpbIml6YWJlbGJvYXZlbnR1cmEuYWx1bm9AdW5pcGFtcGEuZWR1LmJyIl19LCJzaWduX2luX3Byb3ZpZGVyIjoiZ29vZ2xlLmNvbSJ9fQ.NSB0UEbf9DTxkVBu42fuOGygaeYl81YA1ng6d6gm_ZbIFmTUVnob3OX6QQxLN8WfrR4t4zCVT82m1vbcOGac7ZqmvhXBVRVgfefi4UuG29k5RIKwUwXqT8ALqqVKMQ3g3vxk41MRbja3EqWpWNXLfgwKWkHSqlE13NtCJ9xktyR4FMub3R0V7qCcU5WL_YSvh1-OsVoPej9K3rqD9294Io7Roeg3tL4Po2vL3_NaVHg3hD5pxtk8K4viZl_w4H3PfGMe5rnfR1MGsymsT_iertpgkkehmhnMaYUKCNBEIvdpJzCZnzoSQKGbkkg08rIusMKfgFRCOJcaBVG5xOPsVA",
-    # expirationTime: número
-    "expirationTime": 1762629863996,
-    # refreshToken que veio no JSON do DevTools
-    "refreshToken": "AMf-vBwC2Q_JAEWoL5QGMCuSTGG7E49nPK2JSZuTN6f5CpgX-ika4HAulVxATMGaH9EdwOFBwDbFZfbNVN10zoh44YDLPpzYJKKPOC1pRrDxToAYZn_DrVs96LgUM6SqGPu-Czq7EPPisOSpdCWm_mlPg_eN31CsLm7nWX5y1BihgJHqTgfxcIIzXY8YFyb3QdsmmbLofLZwq_JXgPAxGtzVt6iaw_iuTwAstXcV5EtSpXaWa6GypiLaE0voI9P8Lq7MO7jUqYt8vF04wLBoFZhsajMVENaA1NG2pCM8URBPX4b2hnHrlrmNiW5SdZ4BEKSkrmSlO3Jg7Vr2z1dPb58mmSbwkyiRJSXNp4euuGlnoE053_-5Zj3ZphD9YzL94BaLau9_4XGMq0rIRkHP7nauQvccfsevB1fn3fWWU-pGkye1vPs5ErkShFVFiaAKJ4V3FlTdlxVGfSP9tVdMIVIgV45HKCovoxbPcPDhjrbefD0Vk74MbWg"
-  },
-  "uid": "d5qnYH3e2ZYylNmTV8QP4wge6T62"
-}
-
 # Configuração Selenium
 def setup_driver():
     options = webdriver.ChromeOptions()
