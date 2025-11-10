@@ -14,14 +14,14 @@ O Playwright possui interface com várias linguagens de programação. Nesse pro
 
 Os testes desse projeto foram voltados à validação dos seguintes requisitos:
 
-- **Requisito 009 - ** Edição de Slides: O sistema deve permitir editar informações ou substituir slides já cadastrados.
-- **Requisito 010 - ** Exclusão de Slides: O sistema deve permitir excluir slides de um curso, removendo o material e suas referências.
-- **Requisito 011 - ** Cadastro de Material Extra: O sistema deve permitir o vínculo de materiais extras (como links para PDFs, planilhas ou outros) a aulas (slides ou vídeos)específicos.
-- **Requisito 012 - ** Edição de Material Extra: O sistema deve permitir editar o nome, descrição e vínculo de materiais extras já cadastrados.
-- **Requisito 013 - ** Exclusão de Material Extra: O sistema deve permitir excluirmateriais extras, removendo o acesso dos alunos a esses recursos.
-- **Requisito 014 - ** Cadastro de Quiz: O sistema deve permitir criar quizzes, definindo título, perguntas, alternativas e resposta correta.
-- **Requisito 015 - ** Edição de Quiz: O sistema deve permitir editar quizzes existentes, alterando perguntas, respostas e alternativa correta.
-- **Requisito 016 - ** Exclusão de Quiz: O sistema deve permitir excluir quizzes e suas respectivas perguntas
+- **Requisito 009 -** Edição de Slides: O sistema deve permitir editar informações ou substituir slides já cadastrados.
+- **Requisito 010 -** Exclusão de Slides: O sistema deve permitir excluir slides de um curso, removendo o material e suas referências.
+- **Requisito 011 -** Cadastro de Material Extra: O sistema deve permitir o vínculo de materiais extras (como links para PDFs, planilhas ou outros) a aulas (slides ou vídeos)específicos.
+- **Requisito 012 -** Edição de Material Extra: O sistema deve permitir editar o nome, descrição e vínculo de materiais extras já cadastrados.
+- **Requisito 013 -** Exclusão de Material Extra: O sistema deve permitir excluirmateriais extras, removendo o acesso dos alunos a esses recursos.
+- **Requisito 014 -** Cadastro de Quiz: O sistema deve permitir criar quizzes, definindo título, perguntas, alternativas e resposta correta.
+- **Requisito 015 -** Edição de Quiz: O sistema deve permitir editar quizzes existentes, alterando perguntas, respostas e alternativa correta.
+- **Requisito 016 -** Exclusão de Quiz: O sistema deve permitir excluir quizzes e suas respectivas perguntas
 
 ## Estrutura do Projeto
 
