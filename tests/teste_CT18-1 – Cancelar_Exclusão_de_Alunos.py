@@ -70,10 +70,12 @@ def testar_cancelar_exclusao_aluno(driver):
     # Clicar na foto de perfil
     imagem_perfil = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "img.MuiAvatar-img")))
     driver.execute_script("arguments[0].click();", imagem_perfil)
+    time.sleep(4)
 
     # Selecionar “Gerenciamento de Cursos”
     gerenciamento = wait.until(EC.element_to_be_clickable((By.XPATH, "//li[contains(text(), 'Gerenciamento de Cursos')]")))
     driver.execute_script("arguments[0].click();", gerenciamento)
+    time.sleep(4)
 
     # Selecionar curso
     curso = wait.until(EC.presence_of_element_located(
@@ -81,6 +83,7 @@ def testar_cancelar_exclusao_aluno(driver):
     ))
     botao_gerenciar = curso.find_element(By.XPATH, ".//button[contains(., 'Gerenciar Curso')]")
     driver.execute_script("arguments[0].click();", botao_gerenciar)
+    time.sleep(4)
 
     # Abrir aba Alunos
     alunos_aba = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Alunos')]")))
@@ -94,6 +97,7 @@ def testar_cancelar_exclusao_aluno(driver):
     # Clicar em excluir
     botao_excluir = primeira_linha.find_element(By.XPATH, ".//button[.//*[@data-testid='DeleteIcon']]")
     driver.execute_script("arguments[0].click();", botao_excluir)
+    time.sleep(4)
 
     # Esperar modal e clicar em Cancelar
     modal = wait.until(
@@ -103,6 +107,7 @@ def testar_cancelar_exclusao_aluno(driver):
         By.XPATH, ".//button[contains(., 'Cancelar')]"
     )
     driver.execute_script("arguments[0].click();", botao_cancelar)
+    time.sleep(4)
     
     print("Clique em 'Cancelar' realizado.")
 
@@ -111,9 +116,9 @@ def testar_cancelar_exclusao_aluno(driver):
     nomes = [a.text for a in alunos_lista]
 
     if aluno_nome in nomes:
-        print("O aluno foi removido mesmo após cancelar a exclusão.")
-    else:
         print("O aluno ainda aparece na lista após cancelar a exclusão.")
+    else:
+        print("O aluno foi removido mesmo após cancelar a exclusão.")
 
 
 # MAIN
