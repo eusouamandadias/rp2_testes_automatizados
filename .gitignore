@@ -13,3 +13,7 @@ config.toml
 local_settings.txt
 settings.local
 
+# Relatórios e logs
+report.html
+debug.log
+
