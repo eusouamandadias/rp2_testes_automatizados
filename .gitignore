@@ -7,3 +7,9 @@
 
 # Arquivos locais
 last_credentials_update.txt
+
+# .toml, txt e outros arquivos de configuração local
+config.toml
+local_settings.txt
+settings.local
+
