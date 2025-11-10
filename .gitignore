@@ -16,4 +16,6 @@ settings.local
 # Relatórios e logs
 report.html
 debug.log
+poem.lock
+pyproj.toml
 
