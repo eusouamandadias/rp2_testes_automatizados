@@ -74,7 +74,7 @@ def ct33_abertura_correta_curso_recomendado(driver):
         div_cursos = wait.until(
             EC.presence_of_element_located((
                 By.CSS_SELECTOR,
-                "div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.MuiGrid-direction-xs-column.css-279f3v"
+                "div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2"
             ))
         )
         cursos = div_cursos.find_elements(By.XPATH, ".//div[contains(@class,'MuiPaper-root')]")
