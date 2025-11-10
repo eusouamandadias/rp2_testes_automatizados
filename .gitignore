@@ -1,0 +1,9 @@
+# Dev/IDE
+.vscode/
+
+# Cache e perfis de navegador
+.google-chrome-config/
+.pytest_cache/
+
+# Arquivos locais
+last_credentials_update.txt
