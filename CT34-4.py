@@ -126,22 +126,22 @@ def ct34_inserir_pin_correto_acessar_curso(driver):
         driver.save_screenshot("ct34-4_etapa_5_cursos_listados.png")
         print(f"🔎 {len(cursos)} cursos encontrados.")
 
-        # 6 Procurar curso com nome "Teste pin Grupo 2 -2"
+        # 6 Procurar curso com nome "Design e Prototipação no Figma"
         curso_alvo = None
         for curso in cursos:
-            if "Teste pin Grupo 2 -2" in curso.text:
+            if "Design e Prototipação no Figma" in curso.text:
                 curso_alvo = curso
                 break
 
         if not curso_alvo:
-            print("❌ Curso 'Teste pin Grupo 2 -2' não encontrado.")
+            print("❌ Curso 'Design e Prototipação no Figma' não encontrado.")
             driver.save_screenshot("ct34-4_etapa_6_erro_curso_nao_encontrado.png")
             return "REPROVADO ❌"
 
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_alvo)
         time.sleep(0.5)
         driver.save_screenshot("ct34-4_etapa_6_curso_encontrado.png")
-        print("📌 Curso 'Teste pin Grupo 2 -2' localizado.")
+        print("📌 Curso 'Design e Prototipação no Figma' localizado.")
 
         # 7 Botão 'Começar'
         try:
@@ -182,9 +182,9 @@ def ct34_inserir_pin_correto_acessar_curso(driver):
                 By.XPATH, "//input[@type='password' or @type='text' or contains(@placeholder,'PIN') or contains(@placeholder,'chave')]"
             )))
             campo_pin.clear()
-            campo_pin.send_keys("123")
+            campo_pin.send_keys("0001000")
             driver.save_screenshot("ct34-4_etapa_9_pin_inserido.png")
-            print("✅ PIN '123' inserido.")
+            print("✅ PIN '0001000' inserido.")
         except TimeoutException:
             driver.save_screenshot("ct34-4_etapa_9_erro_campo.png")
             return "REVISAR ⚠️"
