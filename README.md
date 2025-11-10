@@ -28,8 +28,8 @@ O projeto está estruturado da seguinte forma:
 ├── pyproject.toml
 ├── report.html
 └── tests
-    ├── requirement_001.py
-    └── requirement_002.py
+    ├── test_rf009.py
+    └── test_rf010.py
 ```
 
 Aqui está uma descrição dos principais arquivos e diretórios:
