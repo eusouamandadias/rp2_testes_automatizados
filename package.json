@@ -1,0 +1,22 @@
+{
+  "name": "selenium",
+  "version": "1.0.0",
+  "description": "Selenium test project",
+  "license": "ISC",
+  "author": "Sidnei Correia Junior",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "assert": "^2.1.0",
+    "selenium-webdriver": "^4.38.0"
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.3",
+    "mocha": "^11.7.4",
+    "nodemon": "^3.1.10"
+  }
+}
