@@ -86,7 +86,7 @@ def ct34_impedir_acesso_curso_pin(driver):
         # 1 Carregar a página inicial
         driver.get(URL)
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        driver.save_screenshot("ct34-2_etapa_1_home.png")
+        ##driver.save_screenshot("ct34-2_etapa_1_home.png")
         print("🏠 Página Home carregada.")
 
         # 2 Localizar a div com os ícones do topo
@@ -101,7 +101,7 @@ def ct34_impedir_acesso_curso_pin(driver):
             div_topbar = wait.until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div.topbarIcons"))
             )
-        driver.save_screenshot("ct34-2_etapa_2_topbar.png")
+        ##driver.save_screenshot("ct34-2_etapa_2_topbar.png")
         print("🎯 Topbar localizada")
 
         # 3 Procurar o link /listcurso dentro dessa div
@@ -129,7 +129,7 @@ def ct34_impedir_acesso_curso_pin(driver):
             driver.get(f"{URL}listcurso")
             wait.until(EC.url_contains("/listcurso"))
             print("✅ /listcurso carregado via fallback.")
-        driver.save_screenshot("ct34-2_etapa_4_listcurso.png")
+        ##driver.save_screenshot("ct34-2_etapa_4_listcurso.png")
 
         # 5 Esperar renderização dos cursos
         print("⌛ Aguardando renderização dos cursos...")
@@ -140,18 +140,18 @@ def ct34_impedir_acesso_curso_pin(driver):
             ))
         )
         print(f"🔍 Encontrados {len(cursos)} cursos na listagem.")
-        driver.save_screenshot("ct34-2_etapa_5_cursos_listados.png")
+        ##driver.save_screenshot("ct34-2_etapa_5_cursos_listados.png")
 
         if not cursos:
             print("❌ Nenhum curso encontrado na listagem.")
-            driver.save_screenshot("ct34-2_etapa_5_erro_nenhum_curso.png")
+            ##driver.save_screenshot("ct34-2_etapa_5_erro_nenhum_curso.png")
             return "REPROVADO ❌"
 
         # 6 Selecionar o primeiro curso
         primeiro_curso = cursos[0]
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", primeiro_curso)
         time.sleep(0.5)
-        driver.save_screenshot("ct34-2_etapa_6_primeiro_curso.png")
+        ##driver.save_screenshot("ct34-2_etapa_6_primeiro_curso.png")
         print("🔍 Primeiro curso selecionado.")
 
         # 7 Procurar o botão 'Começar'
@@ -179,11 +179,11 @@ def ct34_impedir_acesso_curso_pin(driver):
         # 8 Clicar no botão 'Começar'
         if botao_comecar:
             print("🖱️ Tentando clicar no botão 'Começar'...")
-            driver.save_screenshot("ct34-2_etapa_7_botao_comecar.png")
+            ##driver.save_screenshot("ct34-2_etapa_7_botao_comecar.png")
             safe_click(driver, botao_comecar)
         else:
             print("❌ Nenhum botão 'Começar' encontrado no card.")
-            driver.save_screenshot("ct34-2_etapa_7_erro_botao.png")
+            ##driver.save_screenshot("ct34-2_etapa_7_erro_botao.png")
             return "REVISAR ⚠️"
 
         # 9 Esperar o modal de PIN aparecer
@@ -196,10 +196,10 @@ def ct34_impedir_acesso_curso_pin(driver):
                 ))
             )
             print("✅ Modal de PIN detectado.")
-            driver.save_screenshot("ct34-2_etapa_9_modal_pin.png")
+            ##driver.save_screenshot("ct34-2_etapa_9_modal_pin.png")
         except TimeoutException:
             print("⚠️ Nenhum modal detectado após clicar em 'Começar'.")
-            driver.save_screenshot("ct34-2_etapa_9_erro_modal.png")
+            ##driver.save_screenshot("ct34-2_etapa_9_erro_modal.png")
             return "REVISAR ⚠️"
 
         # 10 Procurar e clicar no botão 'Enviar'
@@ -212,18 +212,18 @@ def ct34_impedir_acesso_curso_pin(driver):
                 ))
             )
             print("🎯 Botão 'Enviar' localizado. Tentando clique...")
-            driver.save_screenshot("ct34-2_etapa_10_botao_enviar.png")
+            ##driver.save_screenshot("ct34-2_etapa_10_botao_enviar.png")
             safe_click(driver, botao_enviar)
             print("🖱️ Botão 'Enviar' clicado.")
         except TimeoutException:
             print("❌ Botão 'Enviar' não encontrado no modal.")
-            driver.save_screenshot("ct34-2_etapa_10_erro_botao.png")
+            ##driver.save_screenshot("ct34-2_etapa_10_erro_botao.png")
             return "REVISAR ⚠️"
 
         # 11 Verificar se o modal continua aberto e se aparece mensagem de erro
         print("⌛ Verificando resposta do sistema após clicar em 'Enviar'...")
         time.sleep(2)
-        driver.save_screenshot("ct34-2_etapa_11_apos_envio.png")
+        ##driver.save_screenshot("ct34-2_etapa_11_apos_envio.png")
 
         modal_aberto = len(driver.find_elements(
             By.XPATH,
@@ -241,20 +241,20 @@ def ct34_impedir_acesso_curso_pin(driver):
 
         if modal_aberto and mensagem_erro:
             print("✅ Modal continua aberto e mensagem de erro exibida.")
-            driver.save_screenshot("ct34-2_etapa_11_modal_erro.png")
+            ##driver.save_screenshot("ct34-2_etapa_11_modal_erro.png")
             return "APROVADO ✅"
         elif not modal_aberto:
             print("❌ Modal foi fechado após envio. Curso acessado com sucesso.")
-            driver.save_screenshot("ct34-2_etapa_11_modal_fechado.png")
+            ##driver.save_screenshot("ct34-2_etapa_11_modal_fechado.png")
             return "REPROVADO ❌"
         else:
             print("⚠️ Modal continua aberto, mas sem mensagem clara de erro.")
-            driver.save_screenshot("ct34-2_etapa_11_modal_sem_erro.png")
+            ##driver.save_screenshot("ct34-2_etapa_11_modal_sem_erro.png")
             return "REVISAR ⚠️"
 
     except Exception as e:
         print("❌ Erro durante o CT-34-2:", e)
-        driver.save_screenshot("ct34-2_erro_execucao.png")
+        ##driver.save_screenshot("ct34-2_erro_execucao.png")
         traceback.print_exc()
         return "FALHA ❌"
 
@@ -265,7 +265,7 @@ if __name__ == "__main__":
         login_firebase(driver)
         resultado = ct34_impedir_acesso_curso_pin(driver)
         print(f"\n📊 Resultado do CT-34-2: {resultado}")
-        driver.save_screenshot("ct34-2_resultado.png")
+        ##driver.save_screenshot("ct34-2_resultado.png")
         print("🖼️ Screenshot salva como ct34-2_resultado.png")
     finally:
         time.sleep(3)

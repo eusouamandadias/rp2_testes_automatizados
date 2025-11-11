@@ -83,13 +83,13 @@ def ct34_continuar_acesso_curso_liberado(driver):
         # 1 Carregar a página inicial
         driver.get(URL)
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        driver.save_screenshot("ct34-3_etapa_1_home.png")
+        ##driver.save_screenshot("ct34-3_etapa_1_home.png")
         print("🏠 Página Home carregada.")
         
         # 2 Acessar página de cursos
         driver.get(f"{URL}listcurso")
         wait.until(EC.url_contains("/listcurso"))
-        driver.save_screenshot("ct34-5_etapa_1_listcurso.png")
+        ##driver.save_screenshot("ct34-5_etapa_1_listcurso.png")
         print("✅ Página de cursos carregada.")
 
         # 3 Selecionar aba "EM ANDAMENTO"
@@ -102,11 +102,11 @@ def ct34_continuar_acesso_curso_liberado(driver):
             )
             safe_click(driver, aba_em_andamento)
             time.sleep(2)
-            driver.save_screenshot("ct34-5_etapa_2_aba_em_andamento.png")
+            ##driver.save_screenshot("ct34-5_etapa_2_aba_em_andamento.png")
             print("🖱️ Aba 'EM ANDAMENTO' clicada com sucesso.")
         except TimeoutException:
             print("⚠️ Aba 'EM ANDAMENTO' não encontrada. Continuando na aba padrão...")
-            driver.save_screenshot("ct34-5_etapa_2_erro_aba_em_andamento.png")
+            ##driver.save_screenshot("ct34-5_etapa_2_erro_aba_em_andamento.png")
 
         # 4 Localizar curso protegido
         container_cursos = wait.until(EC.presence_of_element_located((
@@ -115,7 +115,7 @@ def ct34_continuar_acesso_curso_liberado(driver):
         cursos = container_cursos.find_elements(By.XPATH,
             ".//div[contains(@class,'MuiGrid-root') and contains(@class,'MuiGrid-item')]"
         )
-        driver.save_screenshot("ct34-5_etapa_3_cursos_listados.png")
+        ##driver.save_screenshot("ct34-5_etapa_3_cursos_listados.png")
 
         curso_alvo = None
         for curso in cursos:
@@ -133,7 +133,7 @@ def ct34_continuar_acesso_curso_liberado(driver):
             return "REVISAR ⚠️"
 
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_alvo)
-        driver.save_screenshot("ct34-5_etapa_3_curso_protegido_localizado.png")
+        ##driver.save_screenshot("ct34-5_etapa_3_curso_protegido_localizado.png")
         print("🔎 Curso protegido localizado.")
 
         # 5 Clicar em 'Continuar'
@@ -141,28 +141,28 @@ def ct34_continuar_acesso_curso_liberado(driver):
             botao_continuar = curso_alvo.find_element(By.XPATH,
                 ".//button[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'continuar')]"
             )
-            driver.save_screenshot("ct34-5_etapa_4_botao_continuar.png")
+            ##driver.save_screenshot("ct34-5_etapa_4_botao_continuar.png")
             safe_click(driver, botao_continuar)
             print("🖱️ Botão 'Continuar' clicado.")
         except NoSuchElementException:
             print("❌ Botão 'Continuar' não encontrado.")
-            driver.save_screenshot("ct34-5_etapa_4_erro_botao_continuar.png")
+            ##driver.save_screenshot("ct34-5_etapa_4_erro_botao_continuar.png")
             return "REPROVADO ❌"
 
         # 6 Validar acesso: verificar se não está mais em /listcurso
         time.sleep(3)
         if "/listcurso" not in driver.current_url.lower():
-            driver.save_screenshot("ct34-5_etapa_5_url_redirecionada.png")
+            ##driver.save_screenshot("ct34-5_etapa_5_url_redirecionada.png")
             print(f"✅ Teste passou: URL mudou para {driver.current_url}")
             return "APROVADO ✅"
         else:
-            driver.save_screenshot("ct34-5_etapa_5_erro_url_nao_mudou.png")
+            ##driver.save_screenshot("ct34-5_etapa_5_erro_url_nao_mudou.png")
             print(f"❌ Teste falhou: ainda está em {driver.current_url}")
             return "REPROVADO ❌"
 
     except Exception as e:
         print("❌ Erro durante o CT-34-5:", e)
-        driver.save_screenshot("ct34-5_erro_execucao.png")
+        ##driver.save_screenshot("ct34-5_erro_execucao.png")
         traceback.print_exc()
         return "FALHA ❌"
 
@@ -175,7 +175,7 @@ if __name__ == "__main__":
         login_firebase(driver) 
         resultado = ct34_continuar_acesso_curso_liberado(driver)
         print(f"\n📊 Resultado do CT-34-5: {resultado}")
-        driver.save_screenshot("ct34-5_resultado.png")
+        ##driver.save_screenshot("ct34-5_resultado.png")
         print("🖼️ Screenshot salva como ct34-5_resultado.png")
     finally:
         time.sleep(3)

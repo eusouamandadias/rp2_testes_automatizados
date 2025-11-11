@@ -86,7 +86,7 @@ def ct34_acesso_curso_pin(driver):
         # 1 Carregar a página inicial
         driver.get(URL)
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        driver.save_screenshot("ct34-1_etapa_1_home.png")
+        ##driver.save_screenshot("ct34-1_etapa_1_home.png")
         print("🏠 Página Home carregada.")
 
         # 2 Localizar a div com os ícones do topo
@@ -101,7 +101,7 @@ def ct34_acesso_curso_pin(driver):
             div_topbar = wait.until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div.topbarIcons"))
             )
-        driver.save_screenshot("ct34-1_etapa_2_topbar.png")
+        ##driver.save_screenshot("ct34-1_etapa_2_topbar.png")
         print("🎯 Topbar localizada")
 
         # 3 Procurar o link /listcurso dentro dessa div
@@ -129,7 +129,7 @@ def ct34_acesso_curso_pin(driver):
             driver.get(f"{URL}listcurso")
             wait.until(EC.url_contains("/listcurso"))
             print("✅ /listcurso carregado via fallback.")
-        driver.save_screenshot("ct34-1_etapa_4_listcurso.png")
+        ##driver.save_screenshot("ct34-1_etapa_4_listcurso.png")
 
         # 5 Esperar renderização dos cursos
         print("⌛ Aguardando renderização dos cursos...")
@@ -140,18 +140,18 @@ def ct34_acesso_curso_pin(driver):
             ))
         )
         print(f"🔎 Encontrados {len(cursos)} cursos na listagem.")
-        driver.save_screenshot("ct34-1_etapa_5_cursos_listados.png")
+        ##driver.save_screenshot("ct34-1_etapa_5_cursos_listados.png")
 
         if not cursos:
             print("❌ Nenhum curso encontrado na listagem.")
-            driver.save_screenshot("ct34-1_etapa_5_erro_nenhum_curso.png")
+            ##driver.save_screenshot("ct34-1_etapa_5_erro_nenhum_curso.png")
             return "REPROVADO ❌"
 
         # 6 Selecionar o primeiro curso
         primeiro_curso = cursos[0]
-        driver.execute_script("arguments[0].scrollIntoView({block:'center'});", primeiro_curso)
+        ##driver.execute_script("arguments[0].scrollIntoView({block:'center'});", primeiro_curso)
         time.sleep(0.5)
-        driver.save_screenshot("ct34-1_etapa_6_primeiro_curso.png")
+        ##driver.save_screenshot("ct34-1_etapa_6_primeiro_curso.png")
         print("🔎 Primeiro curso selecionado.")
         try:
             print("   →", primeiro_curso.text.splitlines()[:3])
@@ -183,11 +183,11 @@ def ct34_acesso_curso_pin(driver):
         # 8 Clicar no botão 'Começar'
         if botao_comecar:
             print("🖱️ Tentando clicar no botão 'Começar'...")
-            driver.save_screenshot("ct34-1_etapa_7_botao_comecar.png")
+            ##driver.save_screenshot("ct34-1_etapa_7_botao_comecar.png")
             safe_click(driver, botao_comecar)
         else:
             print("❌ Nenhum botão 'Começar' encontrado no card.")
-            driver.save_screenshot("ct34-1_etapa_7_erro_botao.png")
+            ##driver.save_screenshot("ct34-1_etapa_7_erro_botao.png")
             return "REVISAR ⚠️"
 
         # 9 Verificar se houve reação: nova URL ou modal de PIN
@@ -205,23 +205,23 @@ def ct34_acesso_curso_pin(driver):
             )
             reacted = True
             print("✅ Modal de PIN detectado.")
-            driver.save_screenshot("ct34-1_etapa_9_modal_pin.png")
+            ##driver.save_screenshot("ct34-1_etapa_9_modal_pin.png")
         except TimeoutException:
             if driver.current_url != url_anterior:
                 reacted = True
                 print("✅ URL mudou após o clique (curso acessado).")
-                driver.save_screenshot("ct34-1_etapa_9_url_mudou.png")
+                ##driver.save_screenshot("ct34-1_etapa_9_url_mudou.png")
 
         if reacted:
             return "APROVADO ✅"
         else:
             print("⚠️ Nenhuma reação detectada após o clique.")
-            driver.save_screenshot("ct34-1_etapa_9_erro_sem_reacao.png")
+            ##driver.save_screenshot("ct34-1_etapa_9_erro_sem_reacao.png")
             return "REVISAR ⚠️"
 
     except Exception as e:
         print("❌ Erro durante o CT-34-1:", e)
-        driver.save_screenshot("ct34-1_erro_execucao.png")
+        ##driver.save_screenshot("ct34-1_erro_execucao.png")
         import traceback, sys
         traceback.print_exc(file=sys.stdout)
         return "FALHA ❌"
@@ -233,7 +233,7 @@ if __name__ == "__main__":
         login_firebase(driver)
         resultado = ct34_acesso_curso_pin(driver)
         print(f"\n📊 Resultado do CT-34-1: {resultado}")
-        driver.save_screenshot("ct34-1_resultado.png")
+        ##driver.save_screenshot("ct34-1_resultado.png")
         print("🖼️ Screenshot salva como ct34-1_resultado.png")
     finally:
         time.sleep(3)

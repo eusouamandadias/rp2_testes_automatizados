@@ -86,7 +86,7 @@ def ct34_inserir_pin_correto_acessar_curso(driver):
         # 1 Acessar Home
         driver.get(URL)
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        driver.save_screenshot("ct34-4_etapa_1_home.png")
+        ##driver.save_screenshot("ct34-4_etapa_1_home.png")
         print("🏠 Página Home carregada.")
 
         # 2 Localizar topbarIcons
@@ -96,7 +96,7 @@ def ct34_inserir_pin_correto_acessar_curso(driver):
             )))
         except TimeoutException:
             div_topbar = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.topbarIcons")))
-        driver.save_screenshot("ct34-4_etapa_2_topbar.png")
+        ##driver.save_screenshot("ct34-4_etapa_2_topbar.png")
         print("🎯 Topbar localizada.")
 
         # 3 Procurar link /listcurso
@@ -116,14 +116,14 @@ def ct34_inserir_pin_correto_acessar_curso(driver):
         except TimeoutException:
             driver.get(f"{URL}listcurso")
             wait.until(EC.url_contains("/listcurso"))
-        driver.save_screenshot("ct34-4_etapa_4_listcurso.png")
+        ##driver.save_screenshot("ct34-4_etapa_4_listcurso.png")
         print("🎯 Página /listcurso carregada.")
 
         # 5 Renderizar cursos
         cursos = wait.until(EC.presence_of_all_elements_located((
             By.XPATH, "//div[contains(@class,'MuiGrid-root') and contains(@class,'MuiGrid-item')]"
         )))
-        driver.save_screenshot("ct34-4_etapa_5_cursos_listados.png")
+        ##driver.save_screenshot("ct34-4_etapa_5_cursos_listados.png")
         print(f"🔎 {len(cursos)} cursos encontrados.")
 
         # 6 Procurar curso com nome "Design e Prototipação no Figma"
@@ -135,12 +135,12 @@ def ct34_inserir_pin_correto_acessar_curso(driver):
 
         if not curso_alvo:
             print("❌ Curso 'Design e Prototipação no Figma' não encontrado.")
-            driver.save_screenshot("ct34-4_etapa_6_erro_curso_nao_encontrado.png")
+            ##driver.save_screenshot("ct34-4_etapa_6_erro_curso_nao_encontrado.png")
             return "REPROVADO ❌"
 
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_alvo)
         time.sleep(0.5)
-        driver.save_screenshot("ct34-4_etapa_6_curso_encontrado.png")
+        ##driver.save_screenshot("ct34-4_etapa_6_curso_encontrado.png")
         print("📌 Curso 'Design e Prototipação no Figma' localizado.")
 
         # 7 Botão 'Começar'
@@ -157,12 +157,12 @@ def ct34_inserir_pin_correto_acessar_curso(driver):
                 botao_comecar = None
 
         if botao_comecar:
-            driver.save_screenshot("ct34-4_etapa_7_botao_comecar.png")
+            ##driver.save_screenshot("ct34-4_etapa_7_botao_comecar.png")
             safe_click(driver, botao_comecar)
             print("🖱️ Botão 'Começar' clicado.")
         else:
             print("❌ Botão 'Começar' não encontrado.")
-            driver.save_screenshot("ct34-4_etapa_7_erro_botao.png")
+            ##driver.save_screenshot("ct34-4_etapa_7_erro_botao.png")
             return "REVISAR ⚠️"
 
         # 8 Modal de PIN
@@ -170,10 +170,10 @@ def ct34_inserir_pin_correto_acessar_curso(driver):
             modal_pin = wait.until(EC.presence_of_element_located((
                 By.XPATH, "//*[contains(text(),'chave de acesso') or contains(text(),'PIN') or contains(text(),'acesso ao curso')]"
             )))
-            driver.save_screenshot("ct34-4_etapa_8_modal_pin.png")
+            ##driver.save_screenshot("ct34-4_etapa_8_modal_pin.png")
             print("✅ Modal de PIN detectado.")
         except TimeoutException:
-            driver.save_screenshot("ct34-4_etapa_8_erro_modal.png")
+            ##driver.save_screenshot("ct34-4_etapa_8_erro_modal.png")
             return "REVISAR ⚠️"
 
         # 9 Inserir PIN correto
@@ -183,10 +183,10 @@ def ct34_inserir_pin_correto_acessar_curso(driver):
             )))
             campo_pin.clear()
             campo_pin.send_keys("0001000")
-            driver.save_screenshot("ct34-4_etapa_9_pin_inserido.png")
+            ##driver.save_screenshot("ct34-4_etapa_9_pin_inserido.png")
             print("✅ PIN '0001000' inserido.")
         except TimeoutException:
-            driver.save_screenshot("ct34-4_etapa_9_erro_campo.png")
+            ##driver.save_screenshot("ct34-4_etapa_9_erro_campo.png")
             return "REVISAR ⚠️"
 
         # 10 Clicar em 'Enviar' e verificar se a URL mudou
@@ -195,11 +195,11 @@ def ct34_inserir_pin_correto_acessar_curso(driver):
             botao_enviar = wait.until(EC.element_to_be_clickable((
                 By.XPATH, "//button[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'enviar')]"
             )))
-            driver.save_screenshot("ct34-4_etapa_10_botao_enviar.png")
+            ##driver.save_screenshot("ct34-4_etapa_10_botao_enviar.png")
             safe_click(driver, botao_enviar)
             print("🖱️ Botão 'Enviar' clicado.")
         except TimeoutException:
-            driver.save_screenshot("ct34-4_etapa_10_erro_botao.png")
+            ##driver.save_screenshot("ct34-4_etapa_10_erro_botao.png")
             return "REVISAR ⚠️"
 
         # 11 Verificar se a URL mudou
@@ -207,17 +207,17 @@ def ct34_inserir_pin_correto_acessar_curso(driver):
         try:
             wait.until(lambda d: d.current_url != url_antes)
             nova_url = driver.current_url
-            driver.save_screenshot("ct34-4_etapa_11_url_redirecionada.png")
+            ##driver.save_screenshot("ct34-4_etapa_11_url_redirecionada.png")
             print(f"✅ Redirecionado para {nova_url}.")
             return "APROVADO ✅"
         except TimeoutException:
             print("❌ A URL não mudou após envio.")
-            driver.save_screenshot("ct34-4_etapa_11_erro_redirecionamento.png")
+            ##driver.save_screenshot("ct34-4_etapa_11_erro_redirecionamento.png")
             return "REPROVADO ❌"
 
     except Exception as e:
         print("❌ Erro durante o CT-34-4:", e)
-        driver.save_screenshot("ct34-4_erro_execucao.png")
+        ##driver.save_screenshot("ct34-4_erro_execucao.png")
         traceback.print_exc()
         return "FALHA ❌"
 
@@ -228,7 +228,7 @@ if __name__ == "__main__":
         login_firebase(driver)
         resultado = ct34_inserir_pin_correto_acessar_curso(driver)
         print(f"\n📊 Resultado do CT-34-4: {resultado}")
-        driver.save_screenshot("ct34-4_resultado.png")
+        ##driver.save_screenshot("ct34-4_resultado.png")
         print("🖼️ Screenshot salva como ct34-4_resultado.png")
     finally:
         time.sleep(3)

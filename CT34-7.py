@@ -88,7 +88,7 @@ def ct34_fechar_janela_pin(driver):
         # 1 Acessar página inicial
         driver.get(URL)
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        driver.save_screenshot("ct34-7_etapa_1_home.png")
+        ##driver.save_screenshot("ct34-7_etapa_1_home.png")
         print("🏠 Página Home carregada.")
 
         # 2 Localizar topbar e acessar /listcurso
@@ -102,11 +102,11 @@ def ct34_fechar_janela_pin(driver):
         except Exception:
             print("⚠️ Link não encontrado ou não clicável. Acessando diretamente.")
             driver.get(f"{URL}listcurso")
-        driver.save_screenshot("ct34-7_etapa_2_listcurso.png")
+        ##driver.save_screenshot("ct34-7_etapa_2_listcurso.png")
 
         # 3 Aguardar carregamento da página
         wait.until(EC.url_contains("/listcurso"))
-        driver.save_screenshot("ct34-7_etapa_3_listcurso_carregado.png")
+        ##driver.save_screenshot("ct34-7_etapa_3_listcurso_carregado.png")
         print("✅ Página carregada.")
 
         # 4 Localizar container principal de cursos
@@ -114,7 +114,7 @@ def ct34_fechar_janela_pin(driver):
         container = wait.until(EC.presence_of_element_located((
             By.CSS_SELECTOR, "div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.css-1eikg3m"
         )))
-        driver.save_screenshot("ct34-7_etapa_4_container_localizado.png")
+        ##driver.save_screenshot("ct34-7_etapa_4_container_localizado.png")
         print("✅ Container localizado.")
 
         # 5 Selecionar o primeiro curso
@@ -126,13 +126,13 @@ def ct34_fechar_janela_pin(driver):
 
         if not cursos:
             print("❌ Nenhum curso encontrado.")
-            driver.save_screenshot("ct34-7_etapa_5_erro_nenhum_curso.png")
+            ##driver.save_screenshot("ct34-7_etapa_5_erro_nenhum_curso.png")
             return "REPROVADO ❌"
 
         primeiro_curso = cursos[0]
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", primeiro_curso)
         driver.execute_script("arguments[0].style.border='3px solid cyan';", primeiro_curso)
-        driver.save_screenshot("ct34-7_etapa_5_primeiro_curso.png")
+        ##driver.save_screenshot("ct34-7_etapa_5_primeiro_curso.png")
         print("🎯 Primeiro curso localizado e destacado.")
 
         # 6 Procurar e clicar no botão 'Começar'
@@ -142,12 +142,12 @@ def ct34_fechar_janela_pin(driver):
                 ".//div[contains(@class,'MuiCardActions-root') and contains(@class,'MuiCardActions-spacing')]")
             botao_comecar = card_actions.find_element(By.XPATH,
                 ".//button[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'começar')]")
-            driver.save_screenshot("ct34-7_etapa_6_botao_comecar.png")
+            ##driver.save_screenshot("ct34-7_etapa_6_botao_comecar.png")
             print("🖱️ Botão 'Começar' encontrado. Clicando...")
             safe_click(driver, botao_comecar)
         except Exception:
             print("❌ Botão 'Começar' não encontrado.")
-            driver.save_screenshot("ct34-7_etapa_6_erro_botao.png")
+            ##driver.save_screenshot("ct34-7_etapa_6_erro_botao.png")
             return "REVISAR ⚠️"
 
         # 7 Esperar modal de PIN
@@ -156,11 +156,11 @@ def ct34_fechar_janela_pin(driver):
             modal_pin = wait.until(EC.presence_of_element_located((
                 By.XPATH, "//*[contains(text(),'PIN') or contains(text(),'chave de acesso') or contains(text(),'acesso ao curso')]"
             )))
-            driver.save_screenshot("ct34-7_etapa_7_modal_pin.png")
+            ##driver.save_screenshot("ct34-7_etapa_7_modal_pin.png")
             print("✅ Modal de PIN detectado.")
         except TimeoutException:
             print("⚠️ Nenhum modal detectado após clicar em 'Começar'.")
-            driver.save_screenshot("ct34-7_etapa_7_erro_modal.png")
+            ##driver.save_screenshot("ct34-7_etapa_7_erro_modal.png")
             return "REVISAR ⚠️"
 
         # 8 Clicar no backdrop do modal para fechá-lo
@@ -171,12 +171,12 @@ def ct34_fechar_janela_pin(driver):
             )))
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", backdrop)
             time.sleep(0.5)
-            driver.save_screenshot("ct34-7_etapa_8_backdrop_localizado.png")
+            ##driver.save_screenshot("ct34-7_etapa_8_backdrop_localizado.png")
             safe_click(driver, backdrop)
             print("✅ Clique no backdrop executado com sucesso.")
         except TimeoutException:
             print("❌ Backdrop não encontrado.")
-            driver.save_screenshot("ct34-7_etapa_8_erro_backdrop.png")
+            ##driver.save_screenshot("ct34-7_etapa_8_erro_backdrop.png")
             return "REVISAR ⚠️"
 
         # 9 Verificar se o modal foi fechado
@@ -189,16 +189,16 @@ def ct34_fechar_janela_pin(driver):
 
         if modal_aberto:
             print("❌ Modal de PIN ainda aberto após clique no backdrop.")
-            driver.save_screenshot("ct34-7_etapa_9_modal_ainda_aberto.png")
+            ##driver.save_screenshot("ct34-7_etapa_9_modal_ainda_aberto.png")
             return "REPROVADO ❌"
         else:
             print("✅ Modal fechado com sucesso após clique fora.")
-            driver.save_screenshot("ct34-7_etapa_9_modal_fechado.png")
+            ##driver.save_screenshot("ct34-7_etapa_9_modal_fechado.png")
             return "APROVADO ✅"
 
     except Exception as e:
         print("❌ Erro durante o CT-34-7:", e)
-        driver.save_screenshot("ct34-7_erro_execucao.png")
+        ##driver.save_screenshot("ct34-7_erro_execucao.png")
         traceback.print_exc()
         return "FALHA ❌"
 
@@ -209,7 +209,7 @@ if __name__ == "__main__":
         login_firebase(driver)
         resultado = ct34_fechar_janela_pin(driver)
         print(f"\n📊 Resultado do CT-34-7: {resultado}")
-        driver.save_screenshot("ct34-7_resultado.png")
+        ##driver.save_screenshot("ct34-7_resultado.png")
         print("🖼️ Screenshot salva como ct34-7_resultado.png")
     finally:
         time.sleep(3)

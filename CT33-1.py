@@ -58,30 +58,36 @@ def login_firebase(driver):
     time.sleep(4)
     print("✅ Usuário autenticado via Firebase.")
 
-# === TESTE CT-33-2 ===
-def ct33_abertura_correta_curso_recomendado(driver):
+# === TESTE CT-33-1 ===
+def ct33_acesso_cursos_recomendados(driver):
     wait = WebDriverWait(driver, TIMEOUT)
-    print("\n📘 Executando CT-33-2 – Abertura Correta do Curso Recomendado")
+    print("\n📘 Executando CT-33-1 – Acesso a Cursos Recomendados sem PIN")
 
     try:
         # 1 Garantir que a Home está carregada
         driver.get(URL)
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        driver.save_screenshot("ct33-2_etapa_1_home.png")
+        ##driver.save_screenshot("etapa_2_home_carregada.png")
         print("🏠 Página Home carregada.")
 
         # 2 Localizar container de cursos recomendados
         div_cursos = wait.until(
             EC.presence_of_element_located((
                 By.CSS_SELECTOR,
-                "div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2"
+                "div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.MuiGrid-direction-xs-column.css-279f3v"
             ))
         )
         cursos = div_cursos.find_elements(By.XPATH, ".//div[contains(@class,'MuiPaper-root')]")
-        driver.save_screenshot("ct33-2_etapa_2_container.png")
+        ##driver.save_screenshot("etapa_3_container_cursos.png")
+
+        if not cursos:
+            print("❌ Nenhum curso encontrado.")
+            ##driver.save_screenshot("etapa_3_erro_nenhum_curso.png")
+            return "REPROVADO ❌"
+
         print(f"🔍 {len(cursos)} cursos recomendados detectados.")
 
-        # 3 Procurar curso sem PIN
+        # 3 Percorrer todos os cursos e encontrar um sem cadeado
         curso_sem_pin = None
         for curso in cursos:
             try:
@@ -93,29 +99,13 @@ def ct33_abertura_correta_curso_recomendado(driver):
 
         if not curso_sem_pin:
             print("⚠️ Nenhum curso sem PIN encontrado.")
-            driver.save_screenshot("ct33-2_etapa_3_erro_sem_pin.png")
+            ##driver.save_screenshot("etapa_4_erro_sem_pin.png")
             return "REVISAR ⚠️"
 
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_sem_pin)
-        driver.save_screenshot("ct33-2_etapa_3_curso_sem_pin.png")
+        ##driver.save_screenshot("etapa_4_curso_sem_pin_localizado.png")
 
-        # 4 Capturar nome do curso
-        nome_elementos = curso_sem_pin.find_elements(By.XPATH, ".//h6 | .//h5 | .//h4")
-        nome_curso = ""
-        for el in nome_elementos:
-            texto = el.text.strip()
-            if texto:
-                nome_curso = texto
-                break
-
-        if not nome_curso:
-            print("⚠️ Não foi possível capturar o nome do curso.")
-            driver.save_screenshot("ct33-2_etapa_4_erro_nome.png")
-            return "REVISAR ⚠️"
-
-        print(f"📌 Curso selecionado: '{nome_curso}'")
-
-        # 5 Clicar no botão "Acessar"
+        # 4 Clicar no botão "Acessar"
         try:
             botao_acessar = curso_sem_pin.find_element(
                 By.XPATH,
@@ -123,39 +113,34 @@ def ct33_abertura_correta_curso_recomendado(driver):
             )
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao_acessar)
             time.sleep(1)
-            driver.save_screenshot("ct33-2_etapa_5_botao_acessar.png")
+            ##driver.save_screenshot("etapa_5_botao_acessar_localizado.png")
             botao_acessar.click()
             print("🖱️ Botão 'Acessar' clicado.")
         except:
             print("❌ Botão 'Acessar' não encontrado.")
-            driver.save_screenshot("ct33-2_etapa_5_erro_botao.png")
+            ##driver.save_screenshot("etapa_5_erro_botao_acessar.png")
             return "REPROVADO ❌"
 
-        # 6 Esperar redirecionamento
-        wait.until(EC.url_changes(URL))
+        # 5 Validar redirecionamento pela mudança de URL
+        url_antes = driver.current_url
+        print(f"🔎 URL antes do clique: {url_antes}")
+        ##driver.save_screenshot("etapa_6_url_antes.png")
+
+        wait.until(lambda d: d.current_url != url_antes)
         nova_url = driver.current_url
-        time.sleep(5)
-        driver.save_screenshot("ct33-2_etapa_6_url_redirecionada.png")
-        print(f"📄 Página do curso aberta: {nova_url}")
+        print(f"📄 URL após clique: {nova_url}")
+        ##driver.save_screenshot("etapa_6_url_depois.png")
 
-        # 7 Validar título do curso
-        titulo_div = wait.until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "div.MuiBox-root.css-13lzww4"))
-        )
-        titulo_texto = titulo_div.text.strip()
-        driver.save_screenshot("ct33-2_etapa_7_titulo.png")
-        print(f"🔖 Título exibido: '{titulo_texto}'")
-
-        if titulo_texto.lower() in nome_curso.lower() or nome_curso.lower() in titulo_texto.lower():
-            print("✅ Curso aberto corresponde ao curso clicado.")
+        if nova_url != url_antes:
+            print("✅ Redirecionamento confirmado: a URL mudou após o clique.")
             return "APROVADO ✅"
         else:
-            print(f"⚠️ Curso aberto diferente: card='{nome_curso}', página='{titulo_texto}'")
-            return "REVISAR ⚠️"
+            print("❌ A URL não mudou após o clique.")
+            return "REPROVADO ❌"
 
     except Exception as e:
         print("❌ Erro durante execução:", e)
-        driver.save_screenshot("ct33-2_erro_execucao.png")
+        ##driver.save_screenshot("etapa_erro_execucao.png")
         return "FALHA ❌"
 
 # === MAIN ===
@@ -163,10 +148,9 @@ if __name__ == "__main__":
     driver = setup_driver()
     try:
         login_firebase(driver)
-        resultado = ct33_abertura_correta_curso_recomendado(driver)
-        print(f"\n📊 Resultado do CT-33-2: {resultado}")
-        driver.save_screenshot("ct33-2_resultado.png")
-        print("🖼️ Screenshot salva como ct33-2_resultado.png")
+        resultado = ct33_acesso_cursos_recomendados(driver)
+        print(f"\n📊 Resultado do CT-33-1: {resultado}")
+        ##driver.save_screenshot("etapa_final_resultado.png")
     finally:
         time.sleep(5)
         driver.quit()
