@@ -64,7 +64,7 @@ def login_firebase(driver):
     print("Login efetuado e página recarregada.")
 
 # Executar Caso de Teste 17-2
-def testar_consulta_de_alunos_se_o_Aluno_Ainda_Aparece_na_Lista_Apos_sua_Remoção(driver):
+def testar_Consulta_de_Avaliações_Apresentando_o_Percentual(driver):
     wait = WebDriverWait(driver, 15)
 
     # Clicar na foto de perfil
@@ -82,58 +82,67 @@ def testar_consulta_de_alunos_se_o_Aluno_Ainda_Aparece_na_Lista_Apos_sua_Remoç�
     time.sleep(1)
 
     # Selecionar o curso
-    print("Selecionando curso 'Teste Avaliação'")
+    print("Selecionando curso 'Teste Avaliação 2'")
     curso = wait.until(EC.presence_of_element_located(
-        (By.XPATH, "//div[contains(@class,'MuiCard-root')][.//h6[normalize-space(text())='Teste Avaliação']]")
+        (By.XPATH, "//div[contains(@class,'MuiCard-root')][.//h6[normalize-space(text())='Teste avaliação 2']]")
     ))
 
     botao_gerenciar = curso.find_element(By.XPATH, ".//button[contains(., 'Gerenciar Curso')]")
     driver.execute_script("arguments[0].click();", botao_gerenciar)
     time.sleep(2)
-
-    # Abrir aba "Alunos"
-    print("Abrindo aba de alunos...")
-    alunos = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Alunos')]")))
-    alunos.click()
-    time.sleep(10)
-
-    # Selecionar primeira linha (primeiro aluno da lista)
-    primeira_linha = wait.until(EC.presence_of_element_located(
-        (By.XPATH, "(//table//tr)[2]") # TR[1] é cabeçalho
+    
+    # Abrir aba "Avaliações"
+    print("Abrindo aba de Avaliações...")
+    Avaliações = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Avaliações')]")))
+    Avaliações.click()
+    time.sleep(3)
+    
+    #Rolar ate a aba Avaliações
+    print("Rolando ate a lista de avaliações")
+    Avaliações_rolar = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Avaliações')]")))
+    driver.execute_script("arguments[0].scrollIntoView(true);", Avaliações_rolar)
+    time.sleep(3)
+    
+    
+    #Clicar na opção "Atribuir nota"
+    print("Clicar na opção Atribuir nota")
+    atribuir_nota = wait.until(
+        EC.element_to_be_clickable(
+            (By.XPATH, "//button[.//text()[contains(., 'Atribuir Nota')]]")))
+    driver.execute_script("arguments[0].scrollIntoView(true);", atribuir_nota)
+    atribuir_nota.click()
+    
+    # Clicar na barra de pesquisa e digitar o nome desejado
+    print("Pesquisar o nome do aluno desejado")
+    campo_pesquisa = wait.until(EC.presence_of_element_located(
+        (By.CSS_SELECTOR, "input[placeholder='Buscar estudante por nome...']")
     ))
-
-    # Captura o nome do aluno que será removido (para validar)
-    aluno_nome = primeira_linha.find_element(By.XPATH, ".//td[1]").text
-    print(f"Aluno encontrado para remoção: {aluno_nome}")
-
-    # Botão de excluir dentro dessa linha
-    botao_excluir = primeira_linha.find_element(By.XPATH, ".//button[.//*[@data-testid='DeleteIcon']]")
-    driver.execute_script("arguments[0].click();", botao_excluir)
-    time.sleep(10)
-
-    # Confirmar exclusão
-    botao_confirmar = wait.until(
-        EC.element_to_be_clickable((By.XPATH, "//button[normalize-space(text())='Confirmar']"))
-    )
-    driver.execute_script("arguments[0].click();", botao_confirmar)
-    time.sleep(10)
-
-    # Verificar se aluno sumiu da lista
-    recaregar_pagina = driver.page_source
-
-    if aluno_nome not in recaregar_pagina:
-        print("O aluno foi removido da lista.")
-    else:
-        print("O aluno ainda aparece na lista após remoção.")
+    campo_pesquisa.clear()
+    campo_pesquisa.send_keys("Sidnei")
+    time.sleep(5)
     
+    # Localizar todas as linhas da tabela
+    linhas = wait.until(EC.presence_of_all_elements_located(
+        (By.CSS_SELECTOR, "table tbody tr")
+    ))
     
+    # Pegar a primeira linha
+    primeira_linha = linhas[0]
 
+    # Dentro da linha, pegar o input da nota
+    input_nota = primeira_linha.find_element(By.CSS_SELECTOR, "input[type='number']")
+
+    # Ler o valor da nota
+    nota = input_nota.get_attribute("value")
+
+    print("Nota do aluno:", nota)
+    
 # MAIN
 if __name__ == "__main__":
     driver = setup_driver()
     try:
         login_firebase(driver)
-        testar_consulta_de_alunos_se_o_Aluno_Ainda_Aparece_na_Lista_Apos_sua_Remoção(driver)
+        testar_Consulta_de_Avaliações_Apresentando_o_Percentual(driver)
     finally:
         time.sleep(6)
         driver.quit()

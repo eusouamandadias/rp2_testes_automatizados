@@ -64,7 +64,7 @@ def login_firebase(driver):
     print("Login efetuado e página recarregada.")
 
 # Executar Caso de Teste 17-2
-def testar_consulta_de_alunos_com_barra_de_pesquisa(drive):
+def testar_Consulta_de_Avaliações_de_Alunos_em_um_curso_sem_avaliacoes(driver):
     wait = WebDriverWait(driver, 15)
 
     # Clicar na foto de perfil
@@ -82,48 +82,45 @@ def testar_consulta_de_alunos_com_barra_de_pesquisa(drive):
     time.sleep(1)
 
     # Selecionar o curso
-    print("Selecionando curso 'Teste Avaliação'")
-    curso_card = wait.until(EC.presence_of_element_located(
-        (By.XPATH, "//div[contains(@class,'MuiCard-root')][.//h6[normalize-space(text())='Teste Avaliação']]")
+    print("Selecionando curso 'Teste Avaliação 2'")
+    curso = wait.until(EC.presence_of_element_located(
+        (By.XPATH, "//div[contains(@class,'MuiCard-root')][.//h6[normalize-space(text())='Teste avaliação 2']]")
     ))
 
-    gerenciar_btn = curso_card.find_element(By.XPATH, ".//button[contains(., 'Gerenciar Curso')]")
-    driver.execute_script("arguments[0].click();", gerenciar_btn)
+    botao_gerenciar = curso.find_element(By.XPATH, ".//button[contains(., 'Gerenciar Curso')]")
+    driver.execute_script("arguments[0].click();", botao_gerenciar)
     time.sleep(2)
+    
+    # Abrir aba "Avaliações"
+    print("Abrindo aba de Avaliações...")
+    Avaliações = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Avaliações')]")))
+    Avaliações.click()
+    time.sleep(3)
+    
+    #Rolar ate a aba Avaliações
+    print("Rolando ate a lista de Avaliações")
+    Avaliações_rolar = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Avaliações')]")))
+    driver.execute_script("arguments[0].scrollIntoView(true);", Avaliações_rolar)
+    time.sleep(3)
+    
+    # Verificar a Avaliações na Lista
+    print("Verificando lista de Avaliações")
+    avaliacao_linhas = driver.find_elements(By.CSS_SELECTOR, "table tbody tr")
 
-    # Abrir aba "Alunos"
-    print("Abrindo aba de alunos...")
-    alunos_tab = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Alunos')]")))
-    alunos_tab.click()
-    time.sleep(2)
+    if len(avaliacao_linhas) > 0:
+        print(f"Lista encontrada! Total de avaliações listados: {len(avaliacao_linhas)}")
+        # Pegando dados da primeira linha
+    print("Todas as avaliações:")
 
-    # Digitar na barra de pesquisa
-    campo_pesquisa = wait.until(EC.presence_of_element_located(
-        (By.CSS_SELECTOR, "input[placeholder='Buscar estudante por nome ou email...']")
-    ))
-    campo_pesquisa.clear()
-    campo_pesquisa.send_keys("Sidnei")
-    time.sleep(5)
-
-    # Validar resultado da tabela após filtro
-    print("Validando resultado do filtro...")
-    linhas = driver.find_elements(By.CSS_SELECTOR, "table tbody tr")
-
-    if len(linhas) == 0:
-        print("Nenhum aluno encontrado após a pesquisa.")
-    else:
-        print(f"{len(linhas)} aluno(s) encontrado(s):")
-        for linha in linhas:
-            texto = linha.text.lower()
-            if "Sidnei" in texto:
-                print("   → OK:", linha.text)
+    for i, linha in enumerate(avaliacao_linhas, start=1):
+        print(f"{i}. {linha.text}")
 
 # MAIN
 if __name__ == "__main__":
     driver = setup_driver()
     try:
         login_firebase(driver)
-        testar_consulta_de_alunos_com_barra_de_pesquisa(driver)
+        testar_Consulta_de_Avaliações_de_Alunos_em_um_curso_sem_avaliacoes(driver)
     finally:
         time.sleep(6)
         driver.quit()
