@@ -4,7 +4,7 @@ const { By, until } = require('selenium-webdriver');
  R F53 – O sistema deve exibir uma mensagem apropriada quando o estudante tentar acessar um quiz bloqueado.
  */
 
-async function ct53(driver) {
+async function ct(driver) {
 
     // IR PARA CURSO COM QUIZ BLOQUADO
     const courseLink = "https://testes.codefolio.com.br/classes?courseId=-OdfPOQuNTkYquZM9AvL";
@@ -24,4 +24,4 @@ async function ct53(driver) {
 
     // TESTE PASSOU
 }
-module.exports = { ct53 };
+module.exports = { ct };

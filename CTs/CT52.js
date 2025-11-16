@@ -4,7 +4,7 @@ const { By, until } = require('selenium-webdriver');
 RF52 –O sistema deve permitir que o estudante acesse quizzes que estejam desbloqueados em um curso.
 */
 
-async function ct52(driver) {
+async function ct(driver) {
 
     // IR PARA CURSO
     const courseLink = "https://testes.codefolio.com.br/classes?courseId=-OdUWfHdfVN8eOh2HKzU";
@@ -17,4 +17,4 @@ async function ct52(driver) {
     await links.click();
 }
 
-module.exports = { ct52 };
+module.exports = { ct };

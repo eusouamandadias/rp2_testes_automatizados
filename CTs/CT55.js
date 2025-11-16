@@ -4,7 +4,7 @@ const { By, until } = require('selenium-webdriver');
 RF55 – O sistema deve permitir que o estudante consulte suas avaliações e notas obtidas nos quizzes e atividades realizadas.
 */
 
-async function ct55(driver) {
+async function ct(driver) {
     // Navegar para página de avaliações
     const pagina_avaliacoes = "https://testes.codefolio.com.br/minhas-avaliacoes";
     await driver.executeScript(`window.location.replace('${pagina_avaliacoes}')`);
@@ -43,4 +43,4 @@ async function ct55(driver) {
 
 }
 
-module.exports = { ct55 };
+module.exports = { ct };

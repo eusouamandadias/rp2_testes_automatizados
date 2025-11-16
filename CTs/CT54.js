@@ -4,7 +4,7 @@ const { By, until } = require('selenium-webdriver');
 RF54 – O sistema deve permitir que o estudante reporte problemas relacionados a vídeos, materiais ou funcionamento geral do curso.
 */
 
-async function ct54(driver){
+async function ct(driver){
     // IR PARA CURSO COM QUIZ BLOQUADO
     const courseLink = "https://testes.codefolio.com.br/classes?courseId=-OdfPOQuNTkYquZM9AvL";
     await driver.executeScript(`window.location.replace('${courseLink}')`);
@@ -22,4 +22,4 @@ async function ct54(driver){
     
 }
 
-module.exports = { ct54 };
+module.exports = { ct };

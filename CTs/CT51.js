@@ -4,7 +4,7 @@ const { By, until } = require('selenium-webdriver');
  RF51 – O sistema deve permitir que o estudante acesse materiais extras vinculados ao curso ou à aula correspondente, quando disponíveis.
 */
 
-async function ct51(driver) {
+async function ct(driver) {
 
     // IR PARA CURSO
     const courseLink = "https://testes.codefolio.com.br/classes?courseId=-OdUWfHdfVN8eOh2HKzU";
@@ -23,4 +23,4 @@ async function ct51(driver) {
     await materialLink.click();
 }
 
-module.exports = { ct51 };
+module.exports = { ct };

@@ -4,7 +4,7 @@ const { By, until } = require('selenium-webdriver');
 RF50 – O sistema deve permitir que o estudante navegue entre os vídeos de um curso, utilizando botões de próximo e anterior.
 */
 
-async function ct50(driver) {
+async function ct(driver) {
 
     // IR PARA CURSO
     const courseLink = "https://testes.codefolio.com.br/classes?courseId=-OdUWfHdfVN8eOh2HKzU";
@@ -36,4 +36,4 @@ async function ct50(driver) {
 
 }
 
-module.exports = { ct50 };
+module.exports = { ct };
