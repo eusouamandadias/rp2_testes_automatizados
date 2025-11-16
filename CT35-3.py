@@ -228,8 +228,6 @@ def ct35_historico_curso_concluido(driver):
         traceback.print_exc()
         return "FALHA ❌"
 
-
-
 # === MAIN ===
 if __name__ == "__main__":
     driver = setup_driver()
