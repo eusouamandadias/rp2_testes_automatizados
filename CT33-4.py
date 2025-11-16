@@ -18,33 +18,33 @@ def setup_driver():
     return driver
 
 
-# === TESTE CT-33-3 ===
+# === TESTE CT-33-4 ===
 def ct33_recomendacao_usuario_nao_autenticado(driver):
     wait = WebDriverWait(driver, TIMEOUT)
-    print("\n📘 Executando CT-33-3 – Recomendação Visível para Usuários não Autenticados")
+    print("\n📘 Executando CT-33-4 – Recomendação Visível para Usuários não Autenticados")
 
     try:
         # 1 Acessar o site
         print(f"🌐 Acessando: {URL}")
         driver.get(URL)
-        ##driver.save_screenshot("ct33-3_etapa_1_home.png")
+        ##driver.save_screenshot("ct33-4_etapa_1_home.png")
 
         # 2 Esperar a página carregar completamente
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
         print("🏠 Página Home carregada.")
         time.sleep(3)
-        ##driver.save_screenshot("ct33-3_etapa_2_body_renderizado.png")
+        ##driver.save_screenshot("ct33-4_etapa_2_body_renderizado.png")
 
         # 3 Procurar por cursos recomendados
         cursos = driver.find_elements(
             By.CSS_SELECTOR,
             "div.MuiGrid-root.MuiGrid-item.css-tolxbf"
         )
-        ##driver.save_screenshot("ct33-3_etapa_3_cursos_recomendados.png")
+        ##driver.save_screenshot("ct33-4_etapa_3_cursos_recomendados.png")
 
         if len(cursos) == 0:
             print("❌ Nenhum curso recomendado visível.")
-            ##driver.save_screenshot("ct33-3_etapa_3_erro_nenhum_curso.png")
+            ##driver.save_screenshot("ct33-4_etapa_3_erro_nenhum_curso.png")
             return "REPROVADO ❌"
 
         print(f"✅ Foram encontrados {len(cursos)} cursos recomendados.")
@@ -61,11 +61,11 @@ def ct33_recomendacao_usuario_nao_autenticado(driver):
 
         if not curso_sem_pin:
             print("⚠️ Nenhum curso sem PIN encontrado.")
-            ##driver.save_screenshot("ct33-3_etapa_4_erro_sem_pin.png")
+            ##driver.save_screenshot("ct33-4_etapa_4_erro_sem_pin.png")
             return "REVISAR ⚠️"
 
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_sem_pin)
-        ##driver.save_screenshot("ct33-3_etapa_4_curso_sem_pin.png")
+        ##driver.save_screenshot("ct33-4_etapa_4_curso_sem_pin.png")
 
         # 5 Clicar no botão "Acessar"
         try:
@@ -75,20 +75,20 @@ def ct33_recomendacao_usuario_nao_autenticado(driver):
             )
             ##driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao_acessar)
             time.sleep(1)
-            ##driver.save_screenshot("ct33-3_etapa_5_botao_acessar.png")
+            ##driver.save_screenshot("ct33-4_etapa_5_botao_acessar.png")
             botao_acessar.click()
             print("🖱️ Botão 'Acessar' clicado.")
         except:
             print("❌ Botão 'Acessar' não encontrado.")
-            ##driver.save_screenshot("ct33-3_etapa_5_erro_botao.png")
+            ##driver.save_screenshot("ct33-4_etapa_5_erro_botao.png")
             return "REPROVADO ❌"
 
         # 6 Validar redirecionamento pela mudança de URL
         url_antes = URL
-        ##driver.save_screenshot("ct33-3_etapa_6_url_antes.png")
+        ##driver.save_screenshot("ct33-4_etapa_6_url_antes.png")
         wait.until(lambda d: d.current_url != url_antes)
         nova_url = driver.current_url
-        ##driver.save_screenshot("ct33-3_etapa_6_url_depois.png")
+        ##driver.save_screenshot("ct33-4_etapa_6_url_depois.png")
         print(f"📄 URL após clique: {nova_url}")
 
         if nova_url != url_antes:
@@ -100,7 +100,7 @@ def ct33_recomendacao_usuario_nao_autenticado(driver):
 
     except Exception as e:
         print("⚠️ Erro durante a execução do caso de teste:", e)
-        ##driver.save_screenshot("ct33-3_erro_execucao.png")
+        ##driver.save_screenshot("ct33-4_erro_execucao.png")
         return "FALHA ❌"
 
 # === MAIN ===
@@ -108,9 +108,9 @@ if __name__ == "__main__":
     driver = setup_driver()
     try:
         resultado = ct33_recomendacao_usuario_nao_autenticado(driver)
-        print(f"\n📊 Resultado do CT-33-3: {resultado}")
-        ##driver.save_screenshot("ct33-3_resultado.png")
-        print("🖼️ Screenshot salva como ct33-3_resultado.png")
+        print(f"\n📊 Resultado do CT-33-4: {resultado}")
+        ##driver.save_screenshot("ct33-4_resultado.png")
+        print("🖼️ Screenshot salva como ct33-4_resultado.png")
     finally:
         time.sleep(3)
         driver.quit()

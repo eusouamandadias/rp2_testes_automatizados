@@ -21,7 +21,7 @@ def setup_driver():
 # === TESTE CT-33-3 ===
 def ct33_recomendacao_usuario_nao_autenticado(driver):
     wait = WebDriverWait(driver, TIMEOUT)
-    print("\n📘 Executando CT-33-3 – Recomendação Visível para Usuários não Autenticados")
+    print("\n📘 Executando CT-33-3 – Abertura Correta do Curso Recomendado com Conteúdo")
 
     try:
         # 1 Acessar o site
