@@ -6,7 +6,7 @@ const { By, until } = require('selenium-webdriver');
 
 async function ct53(driver) {
 
-    // IR PARA LISTA DE CURSOS
+    // IR PARA CURSO COM QUIZ BLOQUADO
     const courseLink = "https://testes.codefolio.com.br/classes?courseId=-OdfPOQuNTkYquZM9AvL";
     await driver.executeScript(`window.location.replace('${courseLink}')`);
 
@@ -16,12 +16,12 @@ async function ct53(driver) {
     try{
        await driver.findElement(By.xpath("//button[text()='Quiz Bloqueado']")).click();
         console.log("Botão de quiz clicado.")
-        console.log("Teste finalizado com sucesso.")
+        console.log("\nTeste finalizado com sucesso.")
     }catch(e){
         console.log("Erro ao localizar e clicar no botão de quiz!\n", e)
     }
 
-    console.log("\nTeste finalizado!")
 
+    // TESTE PASSOU
 }
 module.exports = { ct53 };
