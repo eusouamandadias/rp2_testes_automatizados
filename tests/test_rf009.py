@@ -63,16 +63,23 @@ def test_rf009_edit_slide_success():
         slide_url_input.clear()
         slide_url_input.fill(NEW_HTML_CODE)
 
-        # Executando o Passo 07: Clicar em "Salvar Alterações"
+        # Clicar em "Salvar Alterações"
         # Encontramos esse botão pois é o único com o texto "Salvar Alterações"
         page.click('button:has-text("Salvar Alterações")')
 
         # Verificando se a mensagem de sucesso é exibida
-        dialog = page.get_by_role("dialog")
-        expect(dialog).to_be_visible()
-        msg = dialog.get_by_text(MESSAGE_TEXT, exact=True)
-        expect(msg).to_be_visible()
-        expect(msg).to_have_text(MESSAGE_TEXT)
+        page.locator("#success-dialog-description").wait_for(
+            state="visible", timeout=10000
+        )
+
+        success_dialog = page.locator("#success-dialog-description")
+        expect(success_dialog).to_be_visible()
+        page.get_by_role("button", name="OK").click()
+        success_dialog.wait_for(state="hidden", timeout=10000)
+
+        page.wait_for_selector(f'h6:has-text("{NEW_SLIDE_TITLE}")', timeout=10000)
+        slide_title = page.locator(f'h6:has-text("{NEW_SLIDE_TITLE}")')
+        expect(slide_title).to_be_visible()
 
 
 def test_rf009_edit_slide_failed_with_empty_title():
@@ -121,11 +128,8 @@ def test_rf009_edit_slide_failed_with_empty_title():
 
         # Clicar em "Salvar Alterações"
         # Encontramos esse botão pois é o único botão com o texto "Salvar Alterações"
-        page.click('button:has-text("Salvar Alterações")')
-
-        # Verificando se o botão "Salvar Alterações" está desabilitado
-
         locator = page.locator('button:has-text("Salvar Alterações")')
+        expect(locator).to_have_attribute("disabled", "")
         expect(locator).to_be_disabled()
 
 
@@ -174,10 +178,7 @@ def test_rf009_edit_slide_failed_with_empty_url():
         slide_url_input.fill("")
 
         # Clicar em "Salvar Alterações"
-        # Encontramos esse botão pois é o único botão com o texto "Salvar Alterações"
-        page.click('button:has-text("Salvar Alterações")')
-
         # Verificando se o botão "Salvar Alterações" está desabilitado
-
         locator = page.locator('button:has-text("Salvar Alterações")')
+        expect(locator).to_have_attribute("disabled", "")
         expect(locator).to_be_disabled()
