@@ -1,7 +1,6 @@
 import json
 import time
 import traceback
-import random
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -11,8 +10,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import (
     ElementClickInterceptedException,
     ElementNotInteractableException,
-    TimeoutException,
-    NoSuchElementException,
     WebDriverException
 )
 
@@ -84,17 +81,19 @@ def ct35_visualizacao_ranking_quiz(driver):
     print("\n📘 Executando CT-35_2-1 – Visualização de Ranking do Quiz")
 
     try:
-        # 1️⃣ Acessar página inicial
+        # 1 Acessar página inicial
         driver.get(URL)
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+        driver.save_screenshot("ct35_1_pagina_home.png")
         print("🏠 Página Home carregada.")
 
-        # 2️⃣ Acessar /listcurso
+        # 2 Acessar /listcurso
         driver.get(f"{URL}listcurso")
         wait.until(EC.url_contains("/listcurso"))
-        print("✅ Página de cursos carregada.")
+        driver.save_screenshot("ct35_2_pagina_cursos.png")
+        print("✅ Página de cursos carregada (screenshot salva).")
 
-        # 3️⃣ Clicar na aba "Concluídos"
+        # 3 Clicar na aba "Concluídos"
         try:
             abas_container = wait.until(EC.presence_of_element_located((
                 By.CSS_SELECTOR, "div.MuiTabs-flexContainer.MuiTabs-centered"
@@ -104,25 +103,29 @@ def ct35_visualizacao_ranking_quiz(driver):
             )
             safe_click(driver, aba_concluidos)
             time.sleep(2)
-            print("🖱️ Aba 'Concluídos' clicada.")
+            driver.save_screenshot("ct35_3_aba_concluidos.png")
+            print("🖱️ Aba 'Concluídos' clicada (screenshot salva).")
         except Exception:
+            driver.save_screenshot("ct35_3_erro_aba_concluidos.png")
             print("❌ Aba 'Concluídos' não encontrada.")
             return "REVISAR ⚠️"
 
-        # 4️⃣ Selecionar o primeiro curso da aba "Concluídos"
+        # 4 Selecionar o primeiro curso da aba "Concluídos"
         cursos_concluidos = wait.until(EC.presence_of_all_elements_located((
             By.XPATH, "//div[contains(@class,'MuiGrid-root') and contains(@class,'MuiGrid-item')]"
         )))
         if not cursos_concluidos:
+            driver.save_screenshot("ct35_4_erro_sem_cursos.png")
             print("❌ Nenhum curso encontrado na aba 'Concluídos'.")
             return "REPROVADO ❌"
 
         curso_selecionado = cursos_concluidos[0]
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_selecionado)
         driver.execute_script("arguments[0].style.border='3px solid orange';", curso_selecionado)
-        print("📌 Primeiro curso da aba 'Concluídos' selecionado.")
+        driver.save_screenshot("ct35_4_primeiro_curso.png")
+        print("📌 Primeiro curso da aba 'Concluídos' selecionado (screenshot salva).")
 
-        # 5️⃣ Clicar no botão "Ver Curso"
+        # 5 Clicar no botão "Ver Curso"
         try:
             botao_acesso = curso_selecionado.find_element(
                 By.XPATH,
@@ -130,81 +133,68 @@ def ct35_visualizacao_ranking_quiz(driver):
             )
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao_acesso)
             safe_click(driver, botao_acesso)
-            print("🖱️ Botão 'Ver Curso' clicado.")
+            driver.save_screenshot("ct35_5_botao_ver_curso.png")
+            print("🖱️ Botão 'Ver Curso' clicado (screenshot salva).")
         except Exception:
+            driver.save_screenshot("ct35_5_erro_botao_ver_curso.png")
             print("❌ Botão 'Ver Curso' não encontrado.")
             return "REPROVADO ❌"
 
-        # 6️⃣ Procurar container principal antes do container do quiz
+        # 6 Abrir Quiz Gigi
         time.sleep(6)
         try:
             botao_abrir_quiz = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, "//button[contains(@title,'Abrir Quiz Gigi')]")
+                (By.XPATH, "//button[contains(@title,'Abrir Quiz Gigi')]")
             ))
             botao_abrir_quiz.click()
-            print("🧠 Botão 'Quiz Gigi' clicado.")
-
+            driver.save_screenshot("ct35_6_botao_quiz_gigi.png")
+            print("🧠 Botão 'Quiz Gigi' clicado (screenshot salva).")
         except Exception:
+            driver.save_screenshot("ct35_6_erro_botao_quiz_gigi.png")
             print("❌ Não foi possível encontrar o botão 'Quiz Gigi'.")
-            driver.save_screenshot("ct35_2_1_etapa_6_erro_botao_quiz_gigi.png")
             return "REPROVADO ❌"
 
-        # 6️⃣ Clicar em botões aleatórios até restar apenas 1 clicável, depois clicar em "Resumo do Quiz"
+        # 7 Clicar em botões aleatórios até restar apenas 1 clicável, depois clicar em "Resumo do Quiz"
         try:
-            tentativas = 0
+            container_botoes = wait.until(EC.presence_of_element_located((
+                By.CSS_SELECTOR, "div.MuiBox-root.css-wo1xkm"
+            )))
+            botoes = container_botoes.find_elements(By.TAG_NAME, "button")
+            time.sleep(2)
 
-            while True:
-                # Captura todos os botões dentro da div css-wo1xkm
-                container_botoes = wait.until(EC.presence_of_element_located((
-                    By.CSS_SELECTOR, "div.MuiBox-root.css-wo1xkm"
-                )))
-                botoes = container_botoes.find_elements(By.TAG_NAME, "button")
+            for idx, botao in enumerate(botoes, start=1):
+                safe_click(driver, botao)
+                driver.save_screenshot(f"ct35_7_resposta_{idx}.png")
+                print(f"🖱️ Resposta aleatória {idx} clicada (screenshot salva).")
+                time.sleep(2)
 
-                # Se restar apenas 1 botão, parar o loop
-                if len(botoes) == 1:
-                    print("⚠️ Restou apenas 1 botão clicável dentro da div css-wo1xkm.")
-                    break
-
-                # Escolhe um botão aleatório e clica
-                botao_random = random.choice(botoes)
-                try:
-                    time.sleep(2)
-                    driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao_random)
-                    safe_click(driver, botao_random)
-                    tentativas += 1
-                    print(f"🖱️ Clique aleatório {tentativas} realizado em um botão dentro da div css-wo1xkm.")
-                    time.sleep(3)
-                except Exception:
-                    print("⚠️ Não foi possível clicar em um botão aleatório, encerrando loop.")
-                    break
-
-            # ➡️ Quando restar apenas 1 botão, clicar no botão "Resumo do Quiz"
+            # Clicar no botão "Resumo do Quiz"
             try:
-                botao_resumo = wait.until(EC.element_to_be_clickable((
-                    By.CSS_SELECTOR,
-                    "[aria-label='Resumo do Quiz']"
+                botao_resumo = wait.until(EC.presence_of_element_located((
+                    By.XPATH, "//button[@aria-label='Resumo do Quiz']"
                 )))
                 driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao_resumo)
                 safe_click(driver, botao_resumo)
-                print("📑 Botão 'Resumo do Quiz' clicado após finalizar cliques aleatórios.")
+                driver.save_screenshot("ct35_7_botao_resumo.png")
+                time.sleep(5)
+                print("📑 Botão 'Resumo do Quiz' clicado (screenshot salva).")
+                return "APROVADO ✅"
             except Exception:
+                driver.save_screenshot("ct35_7_erro_botao_resumo.png")
                 print("❌ Botão 'Resumo do Quiz' não encontrado.")
                 return "REPROVADO ❌"
 
         except Exception:
-            print("❌ Não foi possível executar o ciclo de cliques aleatórios e resumo.")
-            return "REPROVADO ❌"
-
-
-
-        except Exception:
-            print("❌ Não foi possível executar o ciclo de cliques aleatórios e resumo.")
+            driver.save_screenshot("ct35_7_erro_respostas.png")
+            print("❌ Não foi possível executar o ciclo de cliques e visualizar o resumo.")
             return "REPROVADO ❌"
 
     except Exception as e:
+        driver.save_screenshot("ct35_falha.png")
         print("❌ Erro durante o CT-35_2-1:", e)
         traceback.print_exc()
         return "FALHA ❌"
+
         
 # === MAIN ===
 if __name__ == "__main__":
@@ -213,7 +203,7 @@ if __name__ == "__main__":
         login_firebase(driver)
         resultado = ct35_visualizacao_ranking_quiz(driver)
         print(f"\n📊 Resultado do CT-35-1: {resultado}")
-        ##driver.save_screenshot("ct34-1_resultado.png")
+        ##driver.save_screenshot("ct35_2-1_resultado.png")
         print("🖼️ Screenshot salva como ct35-1_resultado.png")
     finally:
         time.sleep(3)
