@@ -6,6 +6,11 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import (
+    ElementClickInterceptedException,
+    ElementNotInteractableException,
+    WebDriverException
+)
 
 URL = "https://testes.codefolio.com.br/"
 TIMEOUT = 10
@@ -18,7 +23,14 @@ def setup_driver():
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     return driver
 
-
+def safe_click(driver, element):
+    """Tenta clicar de forma segura, com fallback via JavaScript."""
+    try:
+        element.click()
+    except (ElementClickInterceptedException, ElementNotInteractableException, WebDriverException):
+        driver.execute_script("arguments[0].scrollIntoView({block:'center'});", element)
+        time.sleep(0.3)
+        driver.execute_script("arguments[0].click();", element)
 # === TESTE CT-33-3 ===
 def ct33_recomendacao_com_conteudo(driver):
     wait = WebDriverWait(driver, TIMEOUT)
