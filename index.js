@@ -1,9 +1,9 @@
 const { getDriver } = require('./driver');
-const { ct54 } = require('./CTs/CT54');
+const { ct55 } = require('./CTs/CT55');
 
 (async function main() {
   let driver = await getDriver();
 
-  await ct54(driver)
+  await ct55(driver)
   
 })();
