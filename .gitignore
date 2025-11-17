@@ -5,8 +5,8 @@
 .google-chrome-config/
 .pytest_cache/
 
-# Arquivos locais
-last_credentials_update.txt
+# Arquivos e diretórios temporários do Python
+__pycache__/
 
 # .toml, txt e outros arquivos de configuração local
 config.toml
@@ -16,9 +16,4 @@ settings.local
 # Relatórios e logs
 report.html
 debug.log
-poem.lock
-pyproj.toml
-
 force_reload.txt
-pyproject.toml
-poetry.lock
