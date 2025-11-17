@@ -15,7 +15,7 @@ def teste_edicao_curso_2(driver):
 
         print("Passo 1/2: Localizando o curso a ser editado e clicando no botão 'Gerenciar Curso'")
         botao_gerenciar_curso = wait.until(
-            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div/div[3]/div/div/div/div/div[2]/button[1]"))
+            EC.element_to_be_clickable((By.XPATH, "//*[text()='Introdução a IHC']/following::button[text()='Gerenciar Curso'][1]"))
         )
         botao_gerenciar_curso.click()
         time.sleep(3)

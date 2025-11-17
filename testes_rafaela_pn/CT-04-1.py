@@ -13,7 +13,7 @@ def teste_exclusao_curso_1(driver):
         driver.get("https://testes.codefolio.com.br/manage-courses")
         print("Passo 1/2: Clicando no botão 'Deletar'")
         botao_deletar = wait.until(
-            EC.element_to_be_clickable((By.XPATH, "/html/body/div/div/div[3]/div/div/div/div/div[2]/button[2]"))
+            EC.element_to_be_clickable((By.XPATH, "//*[text()='Introdução a IHC']/following::button[text()='Deletar'][1]"))
         )
         botao_deletar.click()
         time.sleep(3)
