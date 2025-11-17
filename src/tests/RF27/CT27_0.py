@@ -50,6 +50,7 @@ FBASE_VALUE = {
 def setup_driver():
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.maximize_window()
     return driver
 
 # === Etapa 1: injetar sessão Firebase ===
@@ -78,7 +79,7 @@ def selecionar_aluno(driver, nome_aluno):
 
             # Confere se o nome está dentro desse bloco
             if nome_aluno.upper() in texto:
-                print(f"👀 Encontrado aluno: {texto}")
+                print(f"Encontrado aluno: {texto}")
 
                 # Scroll até o elemento
                 actions.move_to_element(bloco).perform()
@@ -86,25 +87,25 @@ def selecionar_aluno(driver, nome_aluno):
 
                 # Clicar no bloco
                 bloco.click()
-                print(f"✅ Aluno '{nome_aluno}' selecionado!")
+                print(f"Aluno '{nome_aluno}' selecionado!")
                 time.sleep(3)
                 return True
 
         except Exception as e:
-            print("🛑 Erro ao tentar selecionar aluno:", e)
+            print("Erro ao tentar selecionar aluno:", e)
 
-    print(f"❌ Aluno '{nome_aluno}' não encontrado na lista!")
+    print(f" Aluno '{nome_aluno}' não encontrado na lista!")
     return False
 
             
 def realizar_sorteio(driver):
     wait = WebDriverWait(driver, 10)
-    print("▶️ Iniciando Passos do CT-27...")
+    print("Iniciando Passos do CT-27...")
 
     try:
         # Ir direto para a página de cursos
         driver.get("https://testes.codefolio.com.br/listcurso")
-        print("✅ Navegou diretamente para cursos")
+        print("Navegou diretamente para cursos")
         time.sleep(2)
 
         # 2) Clicar aba Concluídos
@@ -112,7 +113,7 @@ def realizar_sorteio(driver):
             EC.element_to_be_clickable((By.XPATH, "//button[contains(text(),'Concluídos')]"))
         )
         driver.execute_script("arguments[0].click();", concluidos_tab)
-        print("✅ Clicou na aba Concluídos.")
+        print("Clicou na aba Concluídos.")
         time.sleep(1)
 
         
@@ -121,18 +122,18 @@ def realizar_sorteio(driver):
         ))
 
         if len(cursos) < 2:
-            print("❌ Não existe um segundo curso na lista!")
+            print("Não existe um segundo curso na lista!")
             return
 
         # Seleciona o segundo card
         segundo_curso = cursos[1]
         driver.execute_script("arguments[0].scrollIntoView();", segundo_curso)
-        print("✅ Segundo curso encontrado.")
+        print("Segundo curso encontrado.")
 
         # 4) Clicar no botão 'Ver Curso' dentro do segundo card
         ver_curso_btn = segundo_curso.find_element(By.XPATH, ".//button[contains(., 'Ver Curso')]")
         driver.execute_script("arguments[0].click();", ver_curso_btn)
-        print("✅ Clicou em 'Ver Curso' do segundo curso com sucesso!")
+        print("Clicou em 'Ver Curso' do segundo curso com sucesso!")
         time.sleep(2)
         
         abrir_quiz = wait.until(
@@ -140,7 +141,7 @@ def realizar_sorteio(driver):
         )
         time.sleep(5)
         driver.execute_script("arguments[0].click();", abrir_quiz)
-        print("✅ Clicou no botão 'Abrir Quiz Gigi' com sucesso!")
+        print("Clicou no botão 'Abrir Quiz Gigi' com sucesso!")
         time.sleep(3)
         
         escolher_aluno = wait.until(
@@ -154,7 +155,7 @@ def realizar_sorteio(driver):
         selecionar_aluno(driver, "MARIANA FERRAO CHUQUEL")
 
     except Exception as e:
-        print(f"\n🛑 Erro durante a execução do teste: {e}")
+        print(f"\nErro durante a execução do teste: {e}")
         print(f"URL Atual: {driver.current_url}")
 
         
