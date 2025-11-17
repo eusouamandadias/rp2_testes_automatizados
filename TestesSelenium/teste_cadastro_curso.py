@@ -4,7 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys 
-from teste_selenium import setup_driver, login_usuario, encerrando_driver
+from login_selenium import setup_driver, login_usuario, encerrando_driver
 
 def teste_cadastro_curso(driver):
     print("Iniciando CT2: Cadastro de Curso.")
@@ -83,6 +83,13 @@ def teste_cadastro_curso(driver):
             
         print("Passos 8 e 9: Curso deve estar listado na página /listcurso.")
         driver.get("https://testes.codefolio.com.br/listcurso")
+        campo_pesquisar = wait.until(
+        EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Pesquisar']"))
+        )
+        campo_pesquisar.click()
+        time.sleep(1)
+        campo_pesquisar.send_keys("Introdução a IHC")
+        time.sleep(3)
         try:
             curso_encontrado = wait.until(
                 EC.visibility_of_element_located((By.XPATH, "//*[contains(text(), 'Introdução a IHC')]"))

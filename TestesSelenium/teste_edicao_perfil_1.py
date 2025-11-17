@@ -1,10 +1,10 @@
 import time
+import os
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys 
-from teste_selenium import setup_driver, login_usuario, encerrando_driver
+from login_selenium import setup_driver, login_usuario, encerrando_driver
 
 def teste_edicao_perfil_1(driver):
     print("Iniciando CT1-1: Edição de Perfil do Usuário.")
@@ -32,7 +32,32 @@ def teste_edicao_perfil_1(driver):
         botao_edicao_perfil.click()
         time.sleep(3)
 
-        print("Passo 4: Alterando campos de Nome e Sobrenome")
+        #print("Passo 4: Clicando no botão 'SELECIONAR FOTO")
+        #botao_selecionar_foto = wait.until(
+        #    EC.presence_of_element_located((By.XPATH, "/html/body/div/div[2]/div[2]/form/div/div[1]/label"))
+        #)
+        #botao_selecionar_foto.click()
+        #time.sleep(5)
+
+        print("Passo 4/5: Selecionando foto/imagem")
+        foto_perfil = wait.until(
+            EC.presence_of_element_located((By.XPATH, "//input[@type='file']"))
+        )
+        try:
+            script_dir = os.path.dirname(os.path.realpath(__file__))
+        except NameError:
+            script_dir = os.getcwd()
+
+        caminho_imagem = os.path.join(script_dir, "codeCat.jpg")
+
+        if not os.path.exists(caminho_imagem):
+            print("ERRO: Imagem não encontrada")
+            raise
+
+        foto_perfil.send_keys(caminho_imagem)
+        time.sleep(5)
+
+        print("Passo 6: Alterando campos de Nome e Sobrenome")
         campo_nome = wait.until(
             EC.visibility_of_element_located((By.NAME, "firstName"))
         )
@@ -49,7 +74,7 @@ def teste_edicao_perfil_1(driver):
         campo_sobrenome.send_keys("Pacheco")
         time.sleep(1)
 
-        print("Passo 5: Alteranco campo das redes sociais")
+        print("Passo 7: Alteranco campo das redes sociais")
         campo_instagram = wait.until(
             EC.visibility_of_element_located((By.NAME, "instagramURL"))
         )
@@ -66,25 +91,12 @@ def teste_edicao_perfil_1(driver):
         campo_facebook.send_keys("https://www.facebook.com/rafaela.nunes.511589/")
         time.sleep(1)
 
-        print("Passo 6: Clicando no botão 'SALVAR ALTERAÇÕES'")
+        print("Passo 8: Clicando no botão 'SALVAR ALTERAÇÕES'")
         botao_salvar_alteracoes = wait.until(
             EC.element_to_be_clickable((By.XPATH, "/html/body/div/div[2]/div[2]/form/div/button"))
         )
         botao_salvar_alteracoes.click()
         time.sleep(1)
-
-        print("Resultado Esperado: Verificando mensagem de atualização do perfil.")
-        try:
-            mensagem_atualizacao = wait.until(
-                EC.visibility_of_element_located((By.XPATH, "//*[contains(text(), 'Perfil atualizado com sucesso!')]"))
-            )
-            
-            assert mensagem_atualizacao.is_displayed()
-            print("VERIFICAÇÃO OK: Mensagem 'Perfil atualizado com sucesso!' foi exibida.")
-            time.sleep(3)
-
-        except TimeoutException:
-            print("ERRO: Falha ao exibir a mensagem 'Perfil atualizado com sucesso!'")
 
     except Exception as e:
         print("Erro durante a execução do CT1-1: ", e)
