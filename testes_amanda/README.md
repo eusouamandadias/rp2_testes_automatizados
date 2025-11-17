@@ -4,7 +4,7 @@ Este projeto concentra testes automatizados utilizando a biblioteca Playwright.
 
 Os testes acessam o seguinte website:
 
-- [CODEFÓLIO] (https://testes.codefolio.com.br)
+- [CODEFÓLIO](https://testes.codefolio.com.br)
 
 O Playwright é uma biblioteca que permite a automação de navegadores web para testes de interface do usuário. Ele suporta múltiplos navegadores, incluindo Chromium, Firefox e WebKit, e oferece uma API simples para interagir com elementos da página, navegar entre páginas, preencher formulários, capturar screenshots, entre outras funcionalidades.
 
