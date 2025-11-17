@@ -121,7 +121,7 @@ def ct35_persistencia_curso_em_andamento(driver):
         driver.execute_script("arguments[0].style.border='3px solid cyan';", curso_sem_pin)
         time.sleep(1)
         #driver.save_screenshot("ct35-2_etapa_4_curso_sem_pin.png")
-        print("📌 Curso sem PIN localizado.")
+        print("✅ Curso sem PIN localizado.")
 
         # 5 Capturar nome do curso
         nome_elementos = curso_sem_pin.find_elements(By.XPATH, ".//h6 | .//h5 | .//h4")
@@ -137,7 +137,7 @@ def ct35_persistencia_curso_em_andamento(driver):
             #driver.save_screenshot("ct35-2_etapa_5_erro_nome.png")
             return "REVISAR ⚠️"
 
-        print(f"📌 Curso selecionado: '{nome_curso}'")
+        print(f"🎯 Curso selecionado: '{nome_curso}'")
 
         # 6 Clicar no botão 'Começar'
         try:
