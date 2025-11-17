@@ -10,8 +10,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import (
     ElementClickInterceptedException,
     ElementNotInteractableException,
-    TimeoutException,
-    NoSuchElementException,
     WebDriverException
 )
 
