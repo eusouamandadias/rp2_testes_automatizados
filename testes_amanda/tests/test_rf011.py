@@ -10,7 +10,7 @@ from time import time
 from playwright.sync_api import sync_playwright, expect
 
 # Importando funções utilitárias
-from testes_amanda.utils import DEFAULT_BROWSER, load_credentials
+from tests.utils import DEFAULT_BROWSER, load_credentials
 
 BROWSER_PADRAO = "chrome"  # Opções: "chrome", "chromium", "firefox", "webkit"
 URL_BASE = "https://testes.codefolio.com.br"

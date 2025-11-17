@@ -8,7 +8,7 @@ Requisito: RF10 – O sistema deve permitir a exclusão de slides de um curso, r
 from playwright.sync_api import sync_playwright, expect
 
 # Importando funções utilitárias
-from testes_amanda.utils import load_credentials
+from tests.utils import load_credentials
 
 
 # Definindo constantes para o teste RF010

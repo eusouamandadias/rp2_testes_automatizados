@@ -33,9 +33,11 @@ O projeto está estruturado da seguinte forma:
 ├── poetry.lock
 ├── pyproject.toml
 ├── report.html
-└── tests
-    ├── test_rf009.py
-    └── test_rf010.py
+└── testes_amanda
+    └── tests
+        ├── test_rf009.py
+        ├── test_rf010.py
+        ├── test_rf011.py
 ```
 
 Aqui está uma descrição dos principais arquivos e diretórios:
@@ -76,15 +78,15 @@ Estando no ambiente virtual do Poetry, podemos executar os testes utilizando vá
 
 1. Executar todos os casos de teste dentro de um arquivo específico:
 
-   - `pytest testes_amanda/<NOME_DO_ARQUIVO>.py -v --html=report.html --self-contained-html`
+   - `pytest tests/<NOME_DO_ARQUIVO>.py -v --html=report.html --self-contained-html`
 
 2. Executar somente um caso de teste específico dentro de um arquivo:
 
-   - `pytest testes_amanda/<NOME_DO_ARQUIVO>.py::<NOME_DA_FUNCAO_DE_TESTE> -v --html=report.html --self-contained-html`
+   - `pytest tests/<NOME_DO_ARQUIVO>.py::<NOME_DA_FUNCAO_DE_TESTE> -v --html=report.html --self-contained-html`
 
 3. Executar todos os casos de teste do projeto:
 
-   - `pytest testes_amanda/ -v --html=report.html --self-contained-html`
+   - `pytest tests/ -v --html=report.html --self-contained-html`
 
 4. O pytest oculta as saídas de print dos testes que são bem-sucedidos por padrão.Para visualizar essas saídas, utilize a opção:
-   - `pytest -s testes_amanda/test_rf009.py -k <NOME_DA_FUNCAO_DE_TESTE>`
+   - `pytest -s tests/test_rf009.py -k <NOME_DA_FUNCAO_DE_TESTE>`

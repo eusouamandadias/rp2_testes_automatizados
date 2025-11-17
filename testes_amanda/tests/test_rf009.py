@@ -10,7 +10,7 @@ from time import time
 from playwright.sync_api import sync_playwright, expect
 
 # Importando funções utilitárias
-from testes_amanda.utils import load_credentials
+from tests.utils import load_credentials
 
 
 # Definindo constantes para o teste RF009
