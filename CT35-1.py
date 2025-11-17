@@ -11,7 +11,6 @@ from selenium.common.exceptions import (
     ElementClickInterceptedException,
     ElementNotInteractableException,
     TimeoutException,
-    NoSuchElementException,
     WebDriverException
 )
 
@@ -121,7 +120,7 @@ def ct35_acesso_curso(driver):
         driver.execute_script("arguments[0].style.border='3px solid cyan';", curso_sem_pin)
         time.sleep(1)
         ##driver.save_screenshot("ct35-1_etapa_4_curso_sem_pin.png")
-        print("📌 Curso sem PIN localizado.")
+        print("✅ Curso sem PIN localizado.")
 
         # 5 Clicar no botão 'Começar'
         try:
@@ -165,7 +164,7 @@ if __name__ == "__main__":
         login_firebase(driver)
         resultado = ct35_acesso_curso(driver)
         print(f"\n📊 Resultado do CT-35-1: {resultado}")
-        ##driver.save_screenshot("ct34-1_resultado.png")
+        ##driver.save_screenshot("ct35-1_resultado.png")
         print("🖼️ Screenshot salva como ct35-1_resultado.png")
     finally:
         time.sleep(3)
