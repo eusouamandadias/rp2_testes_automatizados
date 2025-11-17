@@ -7,11 +7,11 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver import ActionChains
 from selenium.common.exceptions import (
     ElementClickInterceptedException,
     ElementNotInteractableException,
     TimeoutException,
-    NoSuchElementException,
     WebDriverException
 )
 
@@ -86,62 +86,67 @@ def ct35_historico_curso_concluido(driver):
         # 1️⃣ Acessar página inicial
         driver.get(URL)
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        #driver.save_screenshot("ct35-3_etapa_1_home.png")
         print("🏠 Página Home carregada.")
 
         # 2️⃣ Acessar /listcurso
         driver.get(f"{URL}listcurso")
         wait.until(EC.url_contains("/listcurso"))
-        #driver.save_screenshot("ct35-3_etapa_2_listcurso.png")
         print("✅ Página de cursos carregada.")
-
-        # 3️⃣ Renderizar cursos
+        
+        # 3️⃣ Clicar na aba "EM ANDAMENTO"
+        try:
+            abas_container = wait.until(EC.presence_of_element_located((
+                By.CSS_SELECTOR, "div.MuiTabs-flexContainer.MuiTabs-centered"
+            )))
+            aba_em_andamento = abas_container.find_element(By.XPATH,
+                ".//button[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'em andamento')]"
+            )
+            safe_click(driver, aba_em_andamento)
+            time.sleep(2)
+            print("🖱️ Aba 'EM ANDAMENTO' clicada.")
+        except Exception:
+            print("⚠️ Aba 'EM ANDAMENTO' não encontrada.")
+            return "REVISAR ⚠️"
+        
+        # 4️⃣ Renderizar cursos
         cursos = wait.until(EC.presence_of_all_elements_located((
             By.XPATH, "//div[contains(@class,'MuiGrid-root') and contains(@class,'MuiGrid-item')]"
         )))
-        #driver.save_screenshot("ct35-3_etapa_3_cursos_listados.png")
         print(f"🔎 {len(cursos)} cursos encontrados.")
 
-        # 4️⃣ Procurar curso com nome "Curso com vários videos"
+        # 5️⃣ Procurar curso com nome "Photoshop Avançado"
         curso_alvo = None
         for curso in cursos:
-            if "Curso com vários videos" in curso.text:
+            if "Photoshop Avançado" in curso.text:
                 curso_alvo = curso
                 break
 
         if not curso_alvo:
-            print("❌ Curso 'Curso com vários videos' não encontrado.")
-            #driver.save_screenshot("ct35-3_etapa_4_erro_curso_nao_encontrado.png")
+            print("❌ Curso 'Photoshop Avançado' não encontrado.")
             return "REPROVADO ❌"
 
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_alvo)
         driver.execute_script("arguments[0].style.border='3px solid cyan';", curso_alvo)
-        time.sleep(0.5)
-        #driver.save_screenshot("ct35-3_etapa_4_curso_encontrado.png")
-        print("📌 Curso 'Curso com vários videos' localizado.")
+        print("📌 Curso 'Photoshop Avançado' localizado.")
 
-        # 5️⃣ Clicar no botão 'Começar'
+        # 6️⃣ Clicar no botão 'Continuar'
         try:
             botao_comecar = curso_alvo.find_element(
                 By.XPATH,
-                ".//button[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'começar')]"
+                ".//button[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'continuar')]"
             )
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao_comecar)
-            #driver.save_screenshot("ct35-3_etapa_5_botao_comecar.png")
             safe_click(driver, botao_comecar)
-            print("🖱️ Botão 'Começar' clicado.")
+            print("🖱️ Botão 'Continuar' clicado.")
         except Exception:
-            print("❌ Botão 'Começar' não encontrado.")
-            #driver.save_screenshot("ct35-3_etapa_5_erro_botao.png")
+            print("❌ Botão 'Continuar' não encontrado.")
             return "REPROVADO ❌"
 
-                # 6️⃣ Esperar redirecionamento
+        # 6.1️⃣ Esperar redirecionamento
         wait.until(lambda d: d.current_url != f"{URL}listcurso")
-        #driver.save_screenshot("ct35-3_etapa_6_url_redirecionada.png")
         print(f"✅ Curso acessado: {driver.current_url}")
 
-        # 6.1️⃣ Procurar conteúdo dentro do card do curso
-        print("🔍 Procurando conteúdo dentro do card do curso...")
+        # 6.2️⃣ Procurar conteúdo dentro do card do curso
         try:
             card_conteudo = wait.until(EC.presence_of_element_located((
                 By.CSS_SELECTOR,
@@ -149,34 +154,79 @@ def ct35_historico_curso_concluido(driver):
             )))
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", card_conteudo)
             driver.execute_script("arguments[0].style.border='3px solid orange';", card_conteudo)
-            #driver.save_screenshot("ct35-3_etapa_6_card_conteudo.png")
             print("✅ Card de conteúdo localizado.")
         except TimeoutException:
             print("❌ Card de conteúdo não encontrado.")
-            #driver.save_screenshot("ct35-3_etapa_6_erro_card_conteudo.png")
             return "REVISAR ⚠️"
 
-        # 6.2️⃣ Clicar no botão dentro do card
-        print("🖱️ Procurando botão de ação dentro do card...")
+        # 6.3️⃣ Clicar no botão dentro do card
         try:
             botao_acao = card_conteudo.find_element(By.CSS_SELECTOR,
                 "button.MuiButtonBase-root.MuiButton-root.MuiButton-containedPrimary.css-1xdgsfp"
             )
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao_acao)
-            #driver.save_screenshot("ct35-3_etapa_6_botao_acao.png")
             safe_click(driver, botao_acao)
             print("✅ Botão de ação clicado com sucesso.")
         except Exception:
             print("❌ Botão de ação não encontrado dentro do card.")
-            #driver.save_screenshot("ct35-3_etapa_6_erro_botao_acao.png")
             return "REVISAR ⚠️"
+
+        # 6.4️⃣ Manipular vídeo do YouTube
+        try:
+            iframe = wait.until(EC.presence_of_element_located(
+                (By.XPATH, "//iframe[contains(@id, 'widget')]")
+            ))
+            driver.switch_to.frame(iframe)
+            print("🎬 Iframe do YouTube selecionado.")
+
+            # Clicar no botão Play
+            botao_play = wait.until(EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, "button.ytp-large-play-button")
+            ))
+            safe_click(driver, botao_play)
+            print("▶️ Botão Play clicado.")
+            time.sleep(3)
+
+            # 👉 Aqui entra a segunda solução com JavaScript
+            driver.execute_script("""
+                var video = document.querySelector('video');
+                if (video) {
+                    video.currentTime = video.duration - 2; // pula para os últimos 2 segundos
+                }
+            """)
+            print("⏩ Vídeo avançado até o final via JavaScript.")
+
+            driver.switch_to.default_content()
+
+        except Exception as e:
+            print("❌ Erro ao manipular vídeo do YouTube:", e)
+            traceback.print_exc()
+            return "REVISAR ⚠️"
+        
+        # Clicar no botão "Fechar"
+        time.sleep(3)
+        botao_fechar=wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "button.MuiButtonBase-root.MuiButton-root.MuiButton-outlined.MuiButton-outlinedPrimary.MuiButton-sizeMedium.MuiButton-outlinedSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-outlined.MuiButton-outlinedPrimary.MuiButton-sizeMedium.MuiButton-outlinedSizeMedium.MuiButton-colorPrimary.css-6ddp3z")))
+        safe_click(driver, botao_fechar)
+        
+        try:
+            container_botoes = wait.until(EC.presence_of_element_located((
+                By.CSS_SELECTOR, "div.MuiBox-root.css-rmtmmr"
+            )))
+            botoes = container_botoes.find_elements(By.CSS_SELECTOR, "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.css-1xdgsfp")[1]
+            time.sleep(2)
+            print(botoes)
+            safe_click(driver, botoes)
+        except Exception:
+            driver.save_screenshot("ct35_7_erro_respostas.png")
+            print("❌ Não foi possível executar o ciclo de cliques e visualizar o resumo.")
+            return "REPROVADO ❌"
+        
 
         # 7️⃣ Simular finalização do curso
         print("⏳ Simulando finalização do curso...")
         time.sleep(5)
         driver.get(f"{URL}listcurso")
         wait.until(EC.url_contains("/listcurso"))
-        #driver.save_screenshot("ct35-3_etapa_7_volta_listcurso.png")
         print("🔙 Retornou para página de cursos.")
 
         # 8️⃣ Clicar na aba "CONCLUÍDOS"
@@ -189,11 +239,9 @@ def ct35_historico_curso_concluido(driver):
             )
             safe_click(driver, aba_concluidos)
             time.sleep(2)
-            #driver.save_screenshot("ct35-3_etapa_8_aba_concluidos.png")
             print("🖱️ Aba 'CONCLUÍDOS' clicada.")
         except Exception:
             print("⚠️ Aba 'CONCLUÍDOS' não encontrada.")
-            #driver.save_screenshot("ct35-3_etapa_8_erro_aba.png")
             return "REVISAR ⚠️"
 
         # 9️⃣ Verificar se o curso aparece na aba
@@ -203,7 +251,6 @@ def ct35_historico_curso_concluido(driver):
         cursos_concluidos = container_concluidos.find_elements(By.XPATH,
             ".//div[contains(@class,'MuiGrid-root') and contains(@class,'MuiGrid-item')]"
         )
-        #driver.save_screenshot("ct35-3_etapa_9_cursos_concluidos.png")
 
         curso_encontrado = None
         for curso in cursos_concluidos:
@@ -214,19 +261,16 @@ def ct35_historico_curso_concluido(driver):
         if curso_encontrado:
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_encontrado)
             driver.execute_script("arguments[0].style.border='3px solid lime';", curso_encontrado)
-            #driver.save_screenshot("ct35-3_etapa_9_curso_destacado.png")
             print("✅ Curso 'Curso com vários vídeos' aparece na aba CONCLUÍDOS e foi destacado.")
             return "APROVADO ✅"
         else:
             print("❌ Curso 'Curso com vários vídeos' não aparece na aba CONCLUÍDOS.")
-            #driver.save_screenshot("ct35-3_etapa_9_erro_curso_nao_encontrado.png")
             return "REPROVADO ❌"
 
     except Exception as e:
         print("❌ Erro durante o CT-35-3:", e)
-        #driver.save_screenshot("ct35-3_erro_execucao.png")
         traceback.print_exc()
-        return "FALHA ❌"
+        return
 
 # === MAIN ===
 if __name__ == "__main__":
