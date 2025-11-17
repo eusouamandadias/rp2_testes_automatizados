@@ -113,35 +113,20 @@ def ct35_historico_curso_concluido(driver):
         )))
         print(f"🔎 {len(cursos)} cursos encontrados.")
 
-<<<<<<< HEAD
-        # 5 Procurar curso com nome "React Native Básico"
-        curso_alvo = None
-        for curso in cursos:
-            if "React Native Básico" in curso.text:
-=======
         # 5 Procurar curso com nome "Padrões de Projeto"
         curso_alvo = None
         for curso in cursos:
             if "Padrões de Projeto" in curso.text:
->>>>>>> 96af1a465583529c3763f89376b8332cf49efc3d
                 curso_alvo = curso
                 break
 
         if not curso_alvo:
-<<<<<<< HEAD
-            print("❌ Curso 'React Native Básico' não encontrado.")
-=======
             print("❌ Curso 'Padrões de Projeto' não encontrado.")
->>>>>>> 96af1a465583529c3763f89376b8332cf49efc3d
             return "REPROVADO ❌"
 
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_alvo)
         driver.execute_script("arguments[0].style.border='3px solid cyan';", curso_alvo)
-<<<<<<< HEAD
-        print("✅ Curso 'React Native Básico' localizado.")
-=======
         print("✅ Curso 'Padrões de Projeto' localizado.")
->>>>>>> 96af1a465583529c3763f89376b8332cf49efc3d
 
         # 6 Clicar no botão 'Continuar'
         try:
@@ -266,28 +251,17 @@ def ct35_historico_curso_concluido(driver):
 
         curso_encontrado = None
         for curso in cursos_concluidos:
-<<<<<<< HEAD
-            if "React Native Básico" in curso.text:
-=======
             if "Padrões de Projeto" in curso.text:
->>>>>>> 96af1a465583529c3763f89376b8332cf49efc3d
                 curso_encontrado = curso
                 break
 
         if curso_encontrado:
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_encontrado)
             driver.execute_script("arguments[0].style.border='3px solid lime';", curso_encontrado)
-<<<<<<< HEAD
-            print("✅ Curso 'React Native Básico' aparece na aba CONCLUÍDOS e foi destacado.")
-            return "APROVADO ✅"
-        else:
-            print("❌ Curso 'Curso com vários vídeos' não aparece na aba CONCLUÍDOS.")
-=======
             print("✅ Curso 'Padrões de Projeto' aparece na aba CONCLUÍDOS e foi destacado.")
             return "APROVADO ✅"
         else:
             print("❌ Curso 'Padrões de Projeto' não aparece na aba CONCLUÍDOS.")
->>>>>>> 96af1a465583529c3763f89376b8332cf49efc3d
             return "REPROVADO ❌"
 
     except Exception as e:
