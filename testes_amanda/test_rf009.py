@@ -22,6 +22,9 @@ NEW_HTML_CODE = "https://docs.google.com/presentation/d/e/2PACX-1vSzcPobWyEazwXn
 MESSAGE_TEXT = "O slide foi atualizado com sucesso!"
 TEMPO_DE_PAUSA = 3000
 
+# =================
+# ===== CT09-1 ====
+# =================
 # Antes de começar o test rf009, precisamos verificar se o slide "Introdução ao Playwright" já existe e se não, criá-lo. Esse seria o CT08.
 def test_criando_novo_slide():
     # Criar um contexto Playwright
@@ -77,6 +80,9 @@ def test_criando_novo_slide():
         # ).to_have_count(1)
 
 
+# =================
+# ===== CT09-2 ====
+# =================
 def teste_rf009_editar_slide_com_sucesso():
     # Criando um contexto Playwright
     with sync_playwright() as playwright:
@@ -140,6 +146,11 @@ def teste_rf009_editar_slide_com_sucesso():
         expect(slide_title).to_be_visible()
 
 
+# =================
+# ===== CT09-3 ====
+# =================
+
+
 def teste_rf009_editar_slide_falha_com_titulo_vazio():
     # Criando um contexto Playwright
     with sync_playwright() as playwright:
@@ -189,6 +200,11 @@ def teste_rf009_editar_slide_falha_com_titulo_vazio():
         locator = page.locator('button:has-text("Salvar Alterações")')
         expect(locator).to_have_attribute("disabled", "")
         expect(locator).to_be_disabled()
+
+
+# =================
+# ===== CT09-4 ====
+# =================
 
 
 def teste_rf009_editar_slide_falha_com_url_vazia():

@@ -19,7 +19,9 @@ TITULO_MATERIAL_EXTRA = "Get Started with Playwright and VS Code (2025 edition)"
 URL_MATERIAL_EXTRA = "https://www.youtube.com/watch?v=WvsLGZnHmzw&t=909s"
 TEMPO_DE_PAUSA = 3000
 
-# CT11-1: Adicionar Material Extra com Sucesso
+# =================
+# ===== CT011-1 ====
+# =================
 def teste_rf011_adicionar_material_extra_com_sucesso():
     with sync_playwright() as playwright:
         # Inicializando o navegador
@@ -60,7 +62,9 @@ def teste_rf011_adicionar_material_extra_com_sucesso():
         expect(lista_materiais).to_contain_text(TITULO_MATERIAL_EXTRA)
 
 
-# CT11-2: Adicionar Material Extra com Falha (Campos Vazios)
+# =================
+# ===== CT11-2 ====
+# =================
 def test_rf011_adicionar_material_extra_com_falha_campos_vazios():
     with sync_playwright() as playwright:
         # Inicializando o navegador
@@ -98,7 +102,9 @@ def test_rf011_adicionar_material_extra_com_falha_campos_vazios():
         ).to_be_visible()
 
 
-# CT11-3: Adicionar Material Extra Apenas com Nome
+# =================
+# ===== CT11-3 ====
+# =================
 def teste_rf011_adicionar_material_extra_apenas_com_nome():
     with sync_playwright() as playwright:
         # Inicializando o navegador
@@ -136,7 +142,9 @@ def teste_rf011_adicionar_material_extra_apenas_com_nome():
         ).to_be_visible()
 
 
-# CT11-4: Adicionar Material Extra Apenas com URL
+# ==================
+# ===== CT011-4 ====
+# ==================
 def teste_rf011_adicionar_material_extra_apenas_com_url():
     with sync_playwright() as playwright:
         # Inicializando o navegador

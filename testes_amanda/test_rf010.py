@@ -18,6 +18,10 @@ COURSE_MANAGEMENT_URL = f"{BASE_URL}/manage-courses"  # Execution Step 01
 SLIDE_LESSON_TITLE = "Lição 1 - Preparando o ambiente para testar com Playwright"
 MODAL_CONFIRMATION_TEXT = f'Você tem certeza que deseja excluir "{SLIDE_LESSON_TITLE}"?'
 
+# =================
+# ===== CT10-1 ====
+# =================
+
 
 def teste_rf010_cancelar_exclusao_slide():
     # Definindo o contexto Playwright
@@ -46,6 +50,9 @@ def teste_rf010_cancelar_exclusao_slide():
         expect(page.locator(f'text="{SLIDE_LESSON_TITLE}"')).to_have_count(1)
 
 
+# =================
+# ===== CT10-2 ====
+# =================
 def teste_rf010_slide_excluido_com_sucesso():
     with sync_playwright() as playwright:  # Definindo o contexto Playwright
         ############################################################
