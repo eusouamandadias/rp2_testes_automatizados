@@ -1,6 +1,6 @@
 # Automação de Testes com Playwright
 
-Este projeto concentra testes automatizados utilizando a biblioteca Playwright.
+Este projeto concentra testes automatizados utilizando a biblioteca [Playwright](https://playwright.dev/).
 
 Os testes acessam o seguinte website:
 
