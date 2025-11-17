@@ -134,3 +134,41 @@ def teste_rf011_adicionar_material_extra_apenas_com_nome():
         expect(
             page.locator('text="Preencha o nome e a URL do material"')
         ).to_be_visible()
+
+
+# CT11-4: Adicionar Material Extra Apenas com URL
+def teste_rf011_adicionar_material_extra_apenas_com_url():
+    with sync_playwright() as playwright:
+        # Inicializando o navegador
+        browser = playwright.chromium.launch(headless=False, channel=BROWSER_PADRAO)
+
+        # Carregando credenciais de login armazenadas e criando uma nova página
+        credentials = load_credentials(playwright=playwright, browser=browser)
+        page = credentials["page"]
+
+        page.wait_for_timeout(TEMPO_DE_PAUSA)
+        # Accessar a página de gerenciamento de conteúdo do curso
+        print("\n\nIndo para a página de gerenciamento de cursos...\n")
+        page.goto(URL_GERENCIAMENTO_CURSOS)
+
+        page.wait_for_timeout(TEMPO_DE_PAUSA)
+        # Navegar até a aba de Materiais Extras
+        page.locator(".MuiCard-root").filter(
+            has_text="Testes Automatizados com Playwright"
+        ).get_by_role("button", name="Gerenciar Curso").click()
+        page.click('button[role="tab"]:has-text("Slides")')
+
+        page.click('button[role="tab"]:has-text("Materiais Extras")')
+        page.wait_for_timeout(TEMPO_DE_PAUSA)
+
+        nome_material_extra = page.get_by_label("Nome do Material")
+        nome_material_extra.fill("")
+
+        url_material_extra = page.get_by_label("URL do Material")
+        url_material_extra.fill(URL_MATERIAL_EXTRA)
+        page.wait_for_timeout(TEMPO_DE_PAUSA)
+
+        page.click('button:has-text("Adicionar Material")')
+        expect(
+            page.locator('text="Preencha o nome e a URL do material"')
+        ).to_be_visible()
