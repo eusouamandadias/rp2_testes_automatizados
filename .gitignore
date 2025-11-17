@@ -1,0 +1,19 @@
+# Dev/IDE
+.vscode/
+
+# Cache e perfis de navegador
+.google-chrome-config/
+.pytest_cache/
+
+# Arquivos e diretórios temporários do Python
+__pycache__/
+
+# .toml, txt e outros arquivos de configuração local
+config.toml
+local_settings.txt
+settings.local
+
+# Relatórios e logs
+report.html
+debug.log
+force_reload.txt
