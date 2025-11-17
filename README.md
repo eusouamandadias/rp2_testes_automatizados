@@ -8,6 +8,7 @@ ___
 
 ### Abaixo estão os links do cronograma de testes e dos casos de testes criados por cada integrante.
 **Cronograma de Testes:** https://docs.google.com/document/d/1EBRuT0Pbzk_9Pogvv3Ml7Aaippbo_-nHiUhuOqVg2ps/edit?usp=sharing 
+
 **Casos de Teste:** https://docs.google.com/document/d/1L5M6NxTNWHdTDR0qWId1pQGuFwZWzYikWyABX8J7Enk/edit?usp=sharing
 
 
