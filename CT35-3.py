@@ -113,20 +113,20 @@ def ct35_historico_curso_concluido(driver):
         )))
         print(f"🔎 {len(cursos)} cursos encontrados.")
 
-        # 5 Procurar curso com nome "React Native Básico"
+        # 5 Procurar curso com nome "Padrões de Projeto"
         curso_alvo = None
         for curso in cursos:
-            if "React Native Básico" in curso.text:
+            if "Padrões de Projeto" in curso.text:
                 curso_alvo = curso
                 break
 
         if not curso_alvo:
-            print("❌ Curso 'React Native Básico' não encontrado.")
+            print("❌ Curso 'Padrões de Projeto' não encontrado.")
             return "REPROVADO ❌"
 
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_alvo)
         driver.execute_script("arguments[0].style.border='3px solid cyan';", curso_alvo)
-        print("✅ Curso 'React Native Básico' localizado.")
+        print("✅ Curso 'Padrões de Projeto' localizado.")
 
         # 6 Clicar no botão 'Continuar'
         try:
@@ -251,17 +251,17 @@ def ct35_historico_curso_concluido(driver):
 
         curso_encontrado = None
         for curso in cursos_concluidos:
-            if "React Native Básico" in curso.text:
+            if "Padrões de Projeto" in curso.text:
                 curso_encontrado = curso
                 break
 
         if curso_encontrado:
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_encontrado)
             driver.execute_script("arguments[0].style.border='3px solid lime';", curso_encontrado)
-            print("✅ Curso 'React Native Básico' aparece na aba CONCLUÍDOS e foi destacado.")
+            print("✅ Curso 'Padrões de Projeto' aparece na aba CONCLUÍDOS e foi destacado.")
             return "APROVADO ✅"
         else:
-            print("❌ Curso 'Curso com vários vídeos' não aparece na aba CONCLUÍDOS.")
+            print("❌ Curso 'Padrões de Projeto' não aparece na aba CONCLUÍDOS.")
             return "REPROVADO ❌"
 
     except Exception as e:
