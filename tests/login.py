@@ -45,7 +45,6 @@ FBASE_VALUE = {
         "_redirectEventId": None
     }
 
-
 #configuração do webdriver
 def setup_driver():
     options = webdriver.ChromeOptions()
