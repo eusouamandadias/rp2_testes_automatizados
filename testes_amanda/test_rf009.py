@@ -10,7 +10,7 @@ from time import time
 from playwright.sync_api import sync_playwright, expect
 
 # Importando funções utilitárias
-from tests.utils import load_credentials
+from testes_amanda.utils import load_credentials
 
 
 # Definindo constantes para o teste RF009
@@ -22,7 +22,7 @@ NEW_HTML_CODE = "https://docs.google.com/presentation/d/e/2PACX-1vSzcPobWyEazwXn
 MESSAGE_TEXT = "O slide foi atualizado com sucesso!"
 TEMPO_DE_PAUSA = 3000
 
-# Antes de começar co o test rf009, precisamos verificar se o slide "Introdução ao Playwright" já existe e se não, criá-lo.
+# Antes de começar o test rf009, precisamos verificar se o slide "Introdução ao Playwright" já existe e se não, criá-lo. Esse seria o CT08.
 def test_criando_novo_slide():
     # Criar um contexto Playwright
     with sync_playwright() as playwright:
@@ -77,7 +77,7 @@ def test_criando_novo_slide():
         # ).to_have_count(1)
 
 
-def test_rf009_edit_slide_success():
+def teste_rf009_editar_slide_com_sucesso():
     # Criando um contexto Playwright
     with sync_playwright() as playwright:
         ############################################################
@@ -97,7 +97,9 @@ def test_rf009_edit_slide_success():
         page.goto(COURSE_MANAGEMENT_URL)
 
         # Clicando no primeiro botão com o texto "Gerenciar Curso" na página
-        page.click('button:has-text("Gerenciar Curso")')
+        page.locator(".MuiCard-root").filter(
+            has_text="Testes Automatizados com Playwright"
+        ).get_by_role("button", name="Gerenciar Curso").click()
 
         # Acessar a aba "Slides"
         page.click('button[role="tab"]:has-text("Slides")')
@@ -138,7 +140,7 @@ def test_rf009_edit_slide_success():
         expect(slide_title).to_be_visible()
 
 
-def test_rf009_edit_slide_failed_with_empty_title():
+def teste_rf009_editar_slide_falha_com_titulo_vazio():
     # Criando um contexto Playwright
     with sync_playwright() as playwright:
         ############################################################
@@ -189,7 +191,7 @@ def test_rf009_edit_slide_failed_with_empty_title():
         expect(locator).to_be_disabled()
 
 
-def test_rf009_edit_slide_failed_with_empty_url():
+def teste_rf009_editar_slide_falha_com_url_vazia():
     # Criando um contexto Playwright
     with sync_playwright() as playwright:
         ############################################################
