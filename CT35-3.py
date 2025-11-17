@@ -77,23 +77,23 @@ def safe_click(driver, element):
         time.sleep(0.3)
         driver.execute_script("arguments[0].click();", element)
 
-# === TESTE CT-35-2 ===
+# === TESTE CT-35-3 ===
 def ct35_historico_curso_concluido(driver):
     wait = WebDriverWait(driver, TIMEOUT)
     print("\n📘 Executando CT-35-3 – Histórico de Cursos Concluídos")
 
     try:
-        # 1️⃣ Acessar página inicial
+        # 1 Acessar página inicial
         driver.get(URL)
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
         print("🏠 Página Home carregada.")
 
-        # 2️⃣ Acessar /listcurso
+        # 2 Acessar /listcurso
         driver.get(f"{URL}listcurso")
         wait.until(EC.url_contains("/listcurso"))
         print("✅ Página de cursos carregada.")
         
-        # 3️⃣ Clicar na aba "EM ANDAMENTO"
+        # 3 Clicar na aba "EM ANDAMENTO"
         try:
             abas_container = wait.until(EC.presence_of_element_located((
                 By.CSS_SELECTOR, "div.MuiTabs-flexContainer.MuiTabs-centered"
@@ -108,45 +108,45 @@ def ct35_historico_curso_concluido(driver):
             print("⚠️ Aba 'EM ANDAMENTO' não encontrada.")
             return "REVISAR ⚠️"
         
-        # 4️⃣ Renderizar cursos
+        # 4 Renderizar cursos
         cursos = wait.until(EC.presence_of_all_elements_located((
             By.XPATH, "//div[contains(@class,'MuiGrid-root') and contains(@class,'MuiGrid-item')]"
         )))
         print(f"🔎 {len(cursos)} cursos encontrados.")
 
-        # 5️⃣ Procurar curso com nome "Photoshop Avançado"
+        # 5 Procurar curso com nome "React Native Básico"
         curso_alvo = None
         for curso in cursos:
-            if "Photoshop Avançado" in curso.text:
+            if "React Native Básico" in curso.text:
                 curso_alvo = curso
                 break
 
         if not curso_alvo:
-            print("❌ Curso 'Photoshop Avançado' não encontrado.")
+            print("❌ Curso 'React Native Básico' não encontrado.")
             return "REPROVADO ❌"
 
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_alvo)
         driver.execute_script("arguments[0].style.border='3px solid cyan';", curso_alvo)
-        print("📌 Curso 'Photoshop Avançado' localizado.")
+        print("✅ Curso 'React Native Básico' localizado.")
 
-        # 6️⃣ Clicar no botão 'Continuar'
+        # 6 Clicar no botão 'Continuar'
         try:
             botao_comecar = curso_alvo.find_element(
                 By.XPATH,
-                ".//button[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'continuar')]"
+                ".//button[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'começar')]"
             )
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao_comecar)
             safe_click(driver, botao_comecar)
-            print("🖱️ Botão 'Continuar' clicado.")
+            print("🖱️ Botão 'Começar' clicado.")
         except Exception:
-            print("❌ Botão 'Continuar' não encontrado.")
+            print("❌ Botão 'Começar' não encontrado.")
             return "REPROVADO ❌"
 
-        # 6.1️⃣ Esperar redirecionamento
+        # 7 Esperar redirecionamento
         wait.until(lambda d: d.current_url != f"{URL}listcurso")
         print(f"✅ Curso acessado: {driver.current_url}")
 
-        # 6.2️⃣ Procurar conteúdo dentro do card do curso
+        # 8 Procurar conteúdo dentro do card do curso
         try:
             card_conteudo = wait.until(EC.presence_of_element_located((
                 By.CSS_SELECTOR,
@@ -159,7 +159,7 @@ def ct35_historico_curso_concluido(driver):
             print("❌ Card de conteúdo não encontrado.")
             return "REVISAR ⚠️"
 
-        # 6.3️⃣ Clicar no botão dentro do card
+        # 9 Clicar no botão dentro do card
         try:
             botao_acao = card_conteudo.find_element(By.CSS_SELECTOR,
                 "button.MuiButtonBase-root.MuiButton-root.MuiButton-containedPrimary.css-1xdgsfp"
@@ -171,7 +171,7 @@ def ct35_historico_curso_concluido(driver):
             print("❌ Botão de ação não encontrado dentro do card.")
             return "REVISAR ⚠️"
 
-        # 6.4️⃣ Manipular vídeo do YouTube
+        # 10 Assistir vídeo do YouTube
         try:
             iframe = wait.until(EC.presence_of_element_located(
                 (By.XPATH, "//iframe[contains(@id, 'widget')]")
@@ -179,7 +179,6 @@ def ct35_historico_curso_concluido(driver):
             driver.switch_to.frame(iframe)
             print("🎬 Iframe do YouTube selecionado.")
 
-            # Clicar no botão Play
             botao_play = wait.until(EC.element_to_be_clickable(
                 (By.CSS_SELECTOR, "button.ytp-large-play-button")
             ))
@@ -187,7 +186,6 @@ def ct35_historico_curso_concluido(driver):
             print("▶️ Botão Play clicado.")
             time.sleep(3)
 
-            # 👉 Aqui entra a segunda solução com JavaScript
             driver.execute_script("""
                 var video = document.querySelector('video');
                 if (video) {
@@ -203,33 +201,33 @@ def ct35_historico_curso_concluido(driver):
             traceback.print_exc()
             return "REVISAR ⚠️"
         
-        # Clicar no botão "Fechar"
+        # 11 Clicar no botão "Fechar"
         time.sleep(3)
         botao_fechar=wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "button.MuiButtonBase-root.MuiButton-root.MuiButton-outlined.MuiButton-outlinedPrimary.MuiButton-sizeMedium.MuiButton-outlinedSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-outlined.MuiButton-outlinedPrimary.MuiButton-sizeMedium.MuiButton-outlinedSizeMedium.MuiButton-colorPrimary.css-6ddp3z")))
         safe_click(driver, botao_fechar)
         
+        # 12 Clicar no botão 'Ver slide'
         try:
             container_botoes = wait.until(EC.presence_of_element_located((
                 By.CSS_SELECTOR, "div.MuiBox-root.css-rmtmmr"
             )))
             botoes = container_botoes.find_elements(By.CSS_SELECTOR, "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.css-1xdgsfp")[1]
             time.sleep(2)
-            print(botoes)
             safe_click(driver, botoes)
         except Exception:
-            driver.save_screenshot("ct35_7_erro_respostas.png")
+            driver.save_screenshot("ct35_3_erro_respostas.png")
             print("❌ Não foi possível executar o ciclo de cliques e visualizar o resumo.")
             return "REPROVADO ❌"
         
 
-        # 7️⃣ Simular finalização do curso
+        # 13 Simular finalização do curso
         print("⏳ Simulando finalização do curso...")
         time.sleep(5)
         driver.get(f"{URL}listcurso")
         wait.until(EC.url_contains("/listcurso"))
         print("🔙 Retornou para página de cursos.")
 
-        # 8️⃣ Clicar na aba "CONCLUÍDOS"
+        # 14 Clicar na aba "CONCLUÍDOS"
         try:
             abas_container = wait.until(EC.presence_of_element_located((
                 By.CSS_SELECTOR, "div.MuiTabs-flexContainer.MuiTabs-centered"
@@ -244,7 +242,7 @@ def ct35_historico_curso_concluido(driver):
             print("⚠️ Aba 'CONCLUÍDOS' não encontrada.")
             return "REVISAR ⚠️"
 
-        # 9️⃣ Verificar se o curso aparece na aba
+        # 15 Verificar se o curso aparece na aba
         container_concluidos = wait.until(EC.presence_of_element_located((
             By.CSS_SELECTOR, "div.MuiGrid-root.MuiGrid-container"
         )))
@@ -254,14 +252,14 @@ def ct35_historico_curso_concluido(driver):
 
         curso_encontrado = None
         for curso in cursos_concluidos:
-            if "Curso com vários vídeos" in curso.text:
+            if "React Native Básico" in curso.text:
                 curso_encontrado = curso
                 break
 
         if curso_encontrado:
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_encontrado)
             driver.execute_script("arguments[0].style.border='3px solid lime';", curso_encontrado)
-            print("✅ Curso 'Curso com vários vídeos' aparece na aba CONCLUÍDOS e foi destacado.")
+            print("✅ Curso 'React Native Básico' aparece na aba CONCLUÍDOS e foi destacado.")
             return "APROVADO ✅"
         else:
             print("❌ Curso 'Curso com vários vídeos' não aparece na aba CONCLUÍDOS.")
@@ -278,9 +276,9 @@ if __name__ == "__main__":
     try:
         login_firebase(driver)
         resultado = ct35_historico_curso_concluido(driver)
-        print(f"\n📊 Resultado do CT-35-2: {resultado}")
-        ##driver.save_screenshot("ct34-2_resultado.png")
-        print("🖼️ Screenshot salva como ct34-2_resultado.png")
+        print(f"\n📊 Resultado do CT-35-3: {resultado}")
+        ##driver.save_screenshot("ct34-3_resultado.png")
+        print("🖼️ Screenshot salva como ct34-3_resultado.png")
     finally:
         time.sleep(3)
         driver.quit()
