@@ -102,42 +102,30 @@ def testar_consulta_de_alunos(driver):
     driver.execute_script("arguments[0].scrollIntoView(true);", Alunos_rolar)
     time.sleep(3)
     
-    print("Abrindo combobox Filtrar por Progresso")
+    print("Abrindo combobox Filtrar por Role")
 
-    filtro = wait.until(EC.presence_of_element_located((By.ID, "progress-filter")))
-    driver.execute_script("arguments[0].scrollIntoView({block:'center'});", filtro)
+    role_filter = wait.until(EC.presence_of_element_located((By.ID, "role-filter")))
+    driver.execute_script("arguments[0].scrollIntoView({block:'center'});", role_filter)
     time.sleep(0.4)
 
-    # 1) Tenta clicar normalmente
+    # 1) Tenta clique normal
     try:
-        wait.until(EC.element_to_be_clickable((By.ID, "progress-filter"))).click()
+        wait.until(EC.element_to_be_clickable((By.ID, "role-filter"))).click()
     except:
-        # 2) Se falhar, força o clique via JS
-        driver.execute_script("arguments[0].click();", filtro)
+        driver.execute_script("arguments[0].click();", role_filter)
 
     time.sleep(0.4)
 
-    # 3) Aguarda o menu abrir (é um elemento MUI: role='listbox')
-    try:
-        wait.until(EC.presence_of_element_located(
-            (By.XPATH, "//ul[@role='listbox']")
-        ))
-    except:
-        driver.execute_script("arguments[0].click();", filtro)
-        time.sleep(0.4)
-        wait.until(EC.presence_of_element_located(
-            (By.XPATH, "//ul[@role='listbox']")
-        ))
+    print("Filtrando por Role: estudante")
 
-    print("Filtrando por: Iniciante (0-24%)")
-
-    # 4) Agora sim: selecionar a opção
-    opcao_iniciante = wait.until(EC.element_to_be_clickable(
-        (By.XPATH, "//li[@role='option' and contains(., 'Iniciante (0-24%)')]")
+    # 3) Clica na opção estudante
+    opcao_estudante = wait.until(EC.element_to_be_clickable(
+        (By.XPATH, "//li[@role='option' and @data-value='student']")
     ))
-    opcao_iniciante.click()
+    opcao_estudante.click()
 
     time.sleep(1)
+    print("Filtro de role aplicado com sucesso!")
     
     # Verificar se a lista de alunos é exibida
     print("Lista de Alunos Filtrada")
