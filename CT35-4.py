@@ -10,7 +10,6 @@ from selenium.common.exceptions import (
     ElementClickInterceptedException,
     ElementNotInteractableException,
     TimeoutException,
-    NoSuchElementException,
     WebDriverException
 )
 
@@ -34,7 +33,7 @@ def safe_click(driver, element):
         time.sleep(0.3)
         driver.execute_script("arguments[0].click();", element)
 
-# === TESTE CT-35-1 ===
+# === TESTE CT-35-4 ===
 def ct35_acesso_curso(driver):
     wait = WebDriverWait(driver, TIMEOUT)
     print("\n📘 Executando CT-35-4 – Acesso a Cursos sem PIN por Usuário não Autenticado")
@@ -61,6 +60,7 @@ def ct35_acesso_curso(driver):
         print(f"🔎 {len(cursos)} cursos encontrados.")
 
         # 4 Procurar curso sem PIN
+        print("🔎 Procurando curso sem PIN.")
         curso_sem_pin = None
         for curso in cursos:
             try:
@@ -79,7 +79,7 @@ def ct35_acesso_curso(driver):
         driver.execute_script("arguments[0].style.border='3px solid cyan';", curso_sem_pin)
         time.sleep(1)
         ##driver.save_screenshot("ct35-4_etapa_4_curso_sem_pin.png")
-        print("📌 Curso sem PIN localizado.")
+        print("🎯 Curso sem PIN localizado.")
 
         # 5 Clicar no botão 'Começar'
         try:
