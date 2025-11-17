@@ -84,14 +84,14 @@ def ct35_visualizacao_ranking_quiz(driver):
         # 1 Acessar página inicial
         driver.get(URL)
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        driver.save_screenshot("ct35_1_pagina_home.png")
+        driver.save_screenshot("ct35_2-1_pagina_home.png")
         print("🏠 Página Home carregada.")
 
         # 2 Acessar /listcurso
         driver.get(f"{URL}listcurso")
         wait.until(EC.url_contains("/listcurso"))
-        driver.save_screenshot("ct35_2_pagina_cursos.png")
-        print("✅ Página de cursos carregada (screenshot salva).")
+        driver.save_screenshot("ct35_2-1_pagina_cursos.png")
+        print("✅ Página de cursos carregada.")
 
         # 3 Clicar na aba "Concluídos"
         try:
@@ -103,10 +103,10 @@ def ct35_visualizacao_ranking_quiz(driver):
             )
             safe_click(driver, aba_concluidos)
             time.sleep(2)
-            driver.save_screenshot("ct35_3_aba_concluidos.png")
-            print("🖱️ Aba 'Concluídos' clicada (screenshot salva).")
+            driver.save_screenshot("ct35_2-1_aba_concluidos.png")
+            print("🖱️ Aba 'Concluídos' clicada.")
         except Exception:
-            driver.save_screenshot("ct35_3_erro_aba_concluidos.png")
+            driver.save_screenshot("ct35_2-1_erro_aba_concluidos.png")
             print("❌ Aba 'Concluídos' não encontrada.")
             return "REVISAR ⚠️"
 
@@ -115,15 +115,15 @@ def ct35_visualizacao_ranking_quiz(driver):
             By.XPATH, "//div[contains(@class,'MuiGrid-root') and contains(@class,'MuiGrid-item')]"
         )))
         if not cursos_concluidos:
-            driver.save_screenshot("ct35_4_erro_sem_cursos.png")
+            driver.save_screenshot("ct35_2-1_erro_sem_cursos.png")
             print("❌ Nenhum curso encontrado na aba 'Concluídos'.")
             return "REPROVADO ❌"
 
         curso_selecionado = cursos_concluidos[0]
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_selecionado)
         driver.execute_script("arguments[0].style.border='3px solid orange';", curso_selecionado)
-        driver.save_screenshot("ct35_4_primeiro_curso.png")
-        print("📌 Primeiro curso da aba 'Concluídos' selecionado (screenshot salva).")
+        driver.save_screenshot("ct35_2-1_primeiro_curso.png")
+        print("📌 Primeiro curso da aba 'Concluídos' selecionado.")
 
         # 5 Clicar no botão "Ver Curso"
         try:
@@ -134,9 +134,9 @@ def ct35_visualizacao_ranking_quiz(driver):
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao_acesso)
             safe_click(driver, botao_acesso)
             driver.save_screenshot("ct35_5_botao_ver_curso.png")
-            print("🖱️ Botão 'Ver Curso' clicado (screenshot salva).")
+            print("🖱️ Botão 'Ver Curso' clicado).")
         except Exception:
-            driver.save_screenshot("ct35_5_erro_botao_ver_curso.png")
+            driver.save_screenshot("ct35_2-1_erro_botao_ver_curso.png")
             print("❌ Botão 'Ver Curso' não encontrado.")
             return "REPROVADO ❌"
 
@@ -147,10 +147,10 @@ def ct35_visualizacao_ranking_quiz(driver):
                 (By.XPATH, "//button[contains(@title,'Abrir Quiz Gigi')]")
             ))
             botao_abrir_quiz.click()
-            driver.save_screenshot("ct35_6_botao_quiz_gigi.png")
-            print("🧠 Botão 'Quiz Gigi' clicado (screenshot salva).")
+            driver.save_screenshot("ct35_2-1_botao_quiz_gigi.png")
+            print("🖱️ Botão 'Quiz Gigi' clicado.")
         except Exception:
-            driver.save_screenshot("ct35_6_erro_botao_quiz_gigi.png")
+            driver.save_screenshot("ct35_2-1_erro_botao_quiz_gigi.png")
             print("❌ Não foi possível encontrar o botão 'Quiz Gigi'.")
             return "REPROVADO ❌"
 
@@ -164,33 +164,34 @@ def ct35_visualizacao_ranking_quiz(driver):
 
             for idx, botao in enumerate(botoes, start=1):
                 safe_click(driver, botao)
-                driver.save_screenshot(f"ct35_7_resposta_{idx}.png")
-                print(f"🖱️ Resposta aleatória {idx} clicada (screenshot salva).")
+                driver.save_screenshot(f"ct35_2-1_resposta_{idx}.png")
+                print(f"🖱️ Resposta aleatória {idx} clicada.")
                 time.sleep(2)
 
-            # Clicar no botão "Resumo do Quiz"
+        # 8 Clicar no botão "Resumo do Quiz"
             try:
+                print("🔎 Procurando botão 'Resumo do Quiz'")
                 botao_resumo = wait.until(EC.presence_of_element_located((
                     By.XPATH, "//button[@aria-label='Resumo do Quiz']"
                 )))
                 driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao_resumo)
                 safe_click(driver, botao_resumo)
-                driver.save_screenshot("ct35_7_botao_resumo.png")
+                driver.save_screenshot("ct35_2-1_botao_resumo.png")
                 time.sleep(5)
-                print("📑 Botão 'Resumo do Quiz' clicado (screenshot salva).")
+                print("🖱️ Botão 'Resumo do Quiz' clicado.")
                 return "APROVADO ✅"
             except Exception:
-                driver.save_screenshot("ct35_7_erro_botao_resumo.png")
+                driver.save_screenshot("ct35_2-1_erro_botao_resumo.png")
                 print("❌ Botão 'Resumo do Quiz' não encontrado.")
                 return "REPROVADO ❌"
 
         except Exception:
-            driver.save_screenshot("ct35_7_erro_respostas.png")
+            driver.save_screenshot("ct35_2-1_erro_respostas.png")
             print("❌ Não foi possível executar o ciclo de cliques e visualizar o resumo.")
             return "REPROVADO ❌"
 
     except Exception as e:
-        driver.save_screenshot("ct35_falha.png")
+        driver.save_screenshot("ct35_2-1falha.png")
         print("❌ Erro durante o CT-35_2-1:", e)
         traceback.print_exc()
         return "FALHA ❌"
@@ -202,9 +203,9 @@ if __name__ == "__main__":
     try:
         login_firebase(driver)
         resultado = ct35_visualizacao_ranking_quiz(driver)
-        print(f"\n📊 Resultado do CT-35-1: {resultado}")
+        print(f"\n📊 Resultado do CT-35_2-1: {resultado}")
         ##driver.save_screenshot("ct35_2-1_resultado.png")
-        print("🖼️ Screenshot salva como ct35-1_resultado.png")
+        print("🖼️ Screenshot salva como ct35_2-1_resultado.png")
     finally:
         time.sleep(3)
         driver.quit()
