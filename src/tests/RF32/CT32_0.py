@@ -50,6 +50,7 @@ FBASE_VALUE = {
 def setup_driver():
 
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.maximize_window()
     return driver
 
 # === Etapa 1: injetar sessão Firebase ===
@@ -63,35 +64,71 @@ def login_firebase(driver):
     time.sleep(4)
     print("✅ Login Firebase injetado e página recarregada.")
     
-def desabilitar_todos_alunos(driver):
+def clicar_pergunta_personalizada(driver):
+    print("⏳ Procurando botão 'Pergunta Personalizada'...")
+
+    try:
+        botao = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((
+                By.XPATH,
+                "//button[@aria-label='Pergunta Personalizada']"
+            ))
+        )
+
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", botao)
+
+        try:
+            botao.click()
+            print("✅ Botão 'Pergunta Personalizada' clicado com sucesso!")
+            return True
+        except:
+            print("⚠️ Clique normal falhou, tentando JS...")
+            driver.execute_script("arguments[0].click();", botao)
+            print("✅ Botão 'Pergunta Personalizada' clicado via JavaScript!")
+            return True
+
+    except Exception as e:
+        print(f"❌ Não foi possível localizar o botão 'Pergunta Personalizada': {e}")
+        return False
+
+    
+
+def selecionar_aluno(driver, nome_aluno):
     wait = WebDriverWait(driver, 10)
     actions = ActionChains(driver)
 
-    # Seleciona todos os "blocos" de alunos (cada linha da lista)
+    # Seleciona blocos da lista
     alunos = driver.find_elements(By.CSS_SELECTOR, "div.MuiBox-root.css-1xpn68e")
 
-    for aluno in alunos:
+    for bloco in alunos:
         try:
-            # Scroll até o aluno
-            actions.move_to_element(aluno).perform()
-            
-            # Espera o botão de remover estar clicável
-            remover = aluno.find_element(By.XPATH, ".//button[contains(@class,'MuiIconButton-root')]")
-            wait.until(EC.element_to_be_clickable(remover))
-            
-            # Clica no botão de remover
-            remover.click()
-            print("✅ Aluno removido com sucesso")
+            # pega o texto do bloco
+            texto = bloco.text.upper()
 
-            # Aguarda a remoção antes de continuar
-            time.sleep(0.6)
+            # Confere se o nome está dentro desse bloco
+            if nome_aluno.upper() in texto:
+                print(f"👀 Encontrado aluno: {texto}")
+
+                # Scroll até o elemento
+                actions.move_to_element(bloco).perform()
+                time.sleep(0.3)
+
+                # Clicar no bloco
+                bloco.click()
+                print(f"✅ Aluno '{nome_aluno}' selecionado!")
+                time.sleep(3)
+                return True
 
         except Exception as e:
-            print("🛑 Erro ao remover aluno:", e)
+            print("🛑 Erro ao tentar selecionar aluno:", e)
+
+    print(f"❌ Aluno '{nome_aluno}' não encontrado na lista!")
+    return False
+
             
 def realizar_sorteio(driver):
     wait = WebDriverWait(driver, 10)
-    print("▶️ Iniciando Passos do CT-26...")
+    print("▶️ Iniciando Passos do CT-27...")
 
     try:
         # Ir direto para a página de cursos
@@ -134,6 +171,7 @@ def realizar_sorteio(driver):
         driver.execute_script("arguments[0].click();", abrir_quiz)
         print("✅ Clicou no botão 'Abrir Quiz Gigi' com sucesso!")
         time.sleep(3)
+        
         escolher_aluno = wait.until(
             EC.element_to_be_clickable((By.XPATH, "//button[@title='Escolher outro aluno']"))
         )
@@ -141,8 +179,11 @@ def realizar_sorteio(driver):
         driver.execute_script("arguments[0].click();", escolher_aluno)
         print("✅ Clicou em 'Escolher outro aluno' com sucesso!")
         time.sleep(5)
+    
+        selecionar_aluno(driver, "MARIANA FERRAO CHUQUEL")
+        clicar_pergunta_personalizada(driver)
+        time.sleep(3)
         
-        desabilitar_todos_alunos(driver)
         sortear_aluno = wait.until(
             EC.element_to_be_clickable((By.XPATH, "//button[@title='Sortear outro aluno']"))
         )
@@ -151,22 +192,16 @@ def realizar_sorteio(driver):
         print("✅ Clicou em 'Sortear outro aluno' com sucesso!")
         time.sleep(5)
         
-          
-        alert = WebDriverWait(driver, 10).until(EC.alert_is_present())
+        escolher_aluno = wait.until(
+            EC.element_to_be_clickable((By.XPATH, "//button[@title='Escolher outro aluno']"))
+        )
 
-        # Captura o texto
-        mensagem = alert.text.strip()
-        print(f"📢 Mensagem exibida pelo sistema: {mensagem}")
-
-        # Valida o conteúdo esperado
-        assert "Não há alunos habilitados para sorteio" in mensagem, "❌ Mensagem de erro incorreta!"
-
-        # Fecha o alert
-        alert.accept()
-        print("✅ Mensagem validada e alerta fechado com sucesso!")
-                
+        driver.execute_script("arguments[0].click();", escolher_aluno)
+        print("✅ Clicou em 'Escolher outro aluno' com sucesso!")
+        time.sleep(5)
+        selecionar_aluno(driver, "BRUNO DA SILVA ROCHA")
         
-        
+
     except Exception as e:
         print(f"\n🛑 Erro durante a execução do teste: {e}")
         print(f"URL Atual: {driver.current_url}")

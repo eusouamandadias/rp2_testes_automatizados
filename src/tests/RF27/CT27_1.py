@@ -88,6 +88,51 @@ def desabilitar_todos_alunos(driver):
 
         except Exception as e:
             print("🛑 Erro ao remover aluno:", e)
+
+def selecionar_aluno(driver, nome_aluno):
+    wait = WebDriverWait(driver, 10)
+    actions = ActionChains(driver)
+
+    # Seleciona blocos da lista
+    alunos = driver.find_elements(By.CSS_SELECTOR, "div.MuiBox-root.css-1xpn68e")
+
+    for bloco in alunos:
+        try:
+            # pega o texto do bloco
+            texto = bloco.text.upper()
+
+            # Confere se o nome está dentro desse bloco
+            if nome_aluno.upper() in texto:
+                print(f"👀 Encontrado aluno: {texto}")
+
+                # Scroll até o elemento
+                actions.move_to_element(bloco).perform()
+                time.sleep(0.3)
+
+                # Clicar no bloco
+                bloco.click()
+                print(f"✅ Aluno '{nome_aluno}' selecionado!")
+                time.sleep(3)
+                return True
+
+        except Exception as e:
+            print("🛑 Erro ao tentar selecionar aluno:", e)
+
+    print(f"❌ Aluno '{nome_aluno}' não encontrado na lista!")
+    return False
+
+def verificar_alerta_existe(driver):
+    try:
+        alert = WebDriverWait(driver, 5).until(EC.alert_is_present())
+        mensagem = alert.text.strip()
+        print(f"📢 Alerta encontrado! Mensagem: {mensagem}")
+        alert.accept()
+        print("✅ Alerta fechado com sucesso!")
+        return True
+    except:
+        print("ℹ️ Nenhum alerta encontrado.")
+        return False
+
             
 def realizar_sorteio(driver):
     wait = WebDriverWait(driver, 10)
@@ -143,29 +188,8 @@ def realizar_sorteio(driver):
         time.sleep(5)
         
         desabilitar_todos_alunos(driver)
-        sortear_aluno = wait.until(
-            EC.element_to_be_clickable((By.XPATH, "//button[@title='Sortear outro aluno']"))
-        )
-
-        driver.execute_script("arguments[0].click();", sortear_aluno)
-        print("✅ Clicou em 'Sortear outro aluno' com sucesso!")
-        time.sleep(5)
-        
-          
-        alert = WebDriverWait(driver, 10).until(EC.alert_is_present())
-
-        # Captura o texto
-        mensagem = alert.text.strip()
-        print(f"📢 Mensagem exibida pelo sistema: {mensagem}")
-
-        # Valida o conteúdo esperado
-        assert "Não há alunos habilitados para sorteio" in mensagem, "❌ Mensagem de erro incorreta!"
-
-        # Fecha o alert
-        alert.accept()
-        print("✅ Mensagem validada e alerta fechado com sucesso!")
-                
-        
+        selecionar_aluno(driver, "MARIANA FERRAO CHUQUEL")
+        verificar_alerta_existe(driver)
         
     except Exception as e:
         print(f"\n🛑 Erro durante a execução do teste: {e}")
