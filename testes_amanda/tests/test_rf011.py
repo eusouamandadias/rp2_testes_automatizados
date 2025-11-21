@@ -13,15 +13,15 @@ from playwright.sync_api import sync_playwright, expect
 from tests.utils import DEFAULT_BROWSER, load_credentials
 
 BROWSER_PADRAO = "chrome"  # Opções: "chrome", "chromium", "firefox", "webkit"
-URL_BASE = "https://testes.codefolio.com.br"
+URL_BASE = "https://testes-codefolio.web.app"
 URL_GERENCIAMENTO_CURSOS = f"{URL_BASE}/manage-courses"
 TITULO_MATERIAL_EXTRA = "Get Started with Playwright and VS Code (2025 edition)"
 URL_MATERIAL_EXTRA = "https://www.youtube.com/watch?v=WvsLGZnHmzw&t=909s"
 TEMPO_DE_PAUSA = 3000
 
-# =================
+# ==================
 # ===== CT011-1 ====
-# =================
+# ==================
 def teste_rf011_adicionar_material_extra_com_sucesso():
     with sync_playwright() as playwright:
         # Inicializando o navegador
@@ -41,7 +41,6 @@ def teste_rf011_adicionar_material_extra_com_sucesso():
         page.locator(".MuiCard-root").filter(
             has_text="Testes Automatizados com Playwright"
         ).get_by_role("button", name="Gerenciar Curso").click()
-        page.click('button[role="tab"]:has-text("Slides")')
 
         page.click('button[role="tab"]:has-text("Materiais Extras")')
         page.wait_for_timeout(TEMPO_DE_PAUSA)
