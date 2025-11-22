@@ -1,6 +1,7 @@
 import json
 import time
 import traceback
+import random
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -76,21 +77,21 @@ def safe_click(driver, element):
         driver.execute_script("arguments[0].click();", element)
 
 # === TESTE CT-37-1 ===
-def ct37_encerramento_quiz(driver):
+def ct37_encerramento_quiz_com_progresso(driver):
     wait = WebDriverWait(driver, TIMEOUT)
-    print("\n📘 Executando CT-37-1 – Encerramento do Quiz")
+    print("\n📘 Executando CT-37-2 – Sair do Quiz Quando há Progresso")
 
     try:
         # 1 Acessar página inicial
         driver.get(URL)
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        driver.save_screenshot("ct37-1_pagina_home.png")
+        driver.save_screenshot("ct37-2_pagina_home.png")
         print("🏠 Página Home carregada.")
 
         # 2 Acessar /listcurso
         driver.get(f"{URL}listcurso")
         wait.until(EC.url_contains("/listcurso"))
-        driver.save_screenshot("ct37-1_pagina_cursos.png")
+        driver.save_screenshot("ct37-2_pagina_cursos.png")
         print("✅ Página de cursos carregada.")
 
         # 3 Clicar na aba "Concluídos"
@@ -103,10 +104,10 @@ def ct37_encerramento_quiz(driver):
             )
             safe_click(driver, aba_concluidos)
             time.sleep(2)
-            driver.save_screenshot("ct37-1_aba_concluidos.png")
+            driver.save_screenshot("ct37-2_aba_concluidos.png")
             print("🖱️ Aba 'Concluídos' clicada.")
         except Exception:
-            driver.save_screenshot("ct37-1_erro_aba_concluidos.png")
+            driver.save_screenshot("ct37-2_erro_aba_concluidos.png")
             print("❌ Aba 'Concluídos' não encontrada.")
             return "REVISAR ⚠️"
 
@@ -115,14 +116,14 @@ def ct37_encerramento_quiz(driver):
             By.XPATH, "//div[contains(@class,'MuiGrid-root') and contains(@class,'MuiGrid-item')]"
         )))
         if not cursos_concluidos:
-            driver.save_screenshot("ct37-1_erro_sem_cursos.png")
+            driver.save_screenshot("ct37-2_erro_sem_cursos.png")
             print("❌ Nenhum curso encontrado na aba 'Concluídos'.")
             return "REPROVADO ❌"
 
         curso_selecionado = cursos_concluidos[0]
         driver.execute_script("arguments[0].scrollIntoView({block:'center'});", curso_selecionado)
         driver.execute_script("arguments[0].style.border='3px solid orange';", curso_selecionado)
-        driver.save_screenshot("ct37-1_primeiro_curso.png")
+        driver.save_screenshot("ct37-2_primeiro_curso.png")
         print("📌 Primeiro curso da aba 'Concluídos' selecionado.")
 
         # 5 Clicar no botão "Ver Curso"
@@ -133,10 +134,10 @@ def ct37_encerramento_quiz(driver):
             )
             driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao_acesso)
             safe_click(driver, botao_acesso)
-            driver.save_screenshot("ct37-1_5_botao_ver_curso.png")
+            driver.save_screenshot("ct37-2_5_botao_ver_curso.png")
             print("🖱️ Botão 'Ver Curso' clicado).")
         except Exception:
-            driver.save_screenshot("ct37-1_erro_botao_ver_curso.png")
+            driver.save_screenshot("ct37-2_erro_botao_ver_curso.png")
             print("❌ Botão 'Ver Curso' não encontrado.")
             return "REPROVADO ❌"
 
@@ -147,13 +148,36 @@ def ct37_encerramento_quiz(driver):
                 (By.XPATH, "//button[contains(@title,'Abrir Quiz Gigi')]")
             ))
             botao_abrir_quiz.click()
-            driver.save_screenshot("ct37-1_botao_quiz_gigi.png")
+            driver.save_screenshot("ct37-2_botao_quiz_gigi.png")
             print("🖱️ Botão 'Quiz Gigi' clicado.")
         except Exception:
-            driver.save_screenshot("ct37-1_erro_botao_quiz_gigi.png")
+            driver.save_screenshot("ct37-2_erro_botao_quiz_gigi.png")
             print("❌ Não foi possível encontrar o botão 'Quiz Gigi'.")
             return "REPROVADO ❌"
             
+         # 7 Sortear e clicar em apenas um botão de resposta
+        try:
+            container_botoes = wait.until(EC.presence_of_element_located((
+                By.CSS_SELECTOR, "div.MuiBox-root.css-wo1xkm"
+            )))
+            botoes = container_botoes.find_elements(By.TAG_NAME, "button")
+            time.sleep(2)
+
+            if botoes:
+                botao_escolhido = random.choice(botoes)
+                driver.execute_script("arguments[0].scrollIntoView({block:'center'});", botao_escolhido)
+                safe_click(driver, botao_escolhido)
+                driver.save_screenshot("ct37-2_resposta_sorteada.png")
+                print("🖱️ Um botão de resposta foi sorteado e clicado.")
+                time.sleep(2)
+            else:
+                print("⚠️ Nenhum botão de resposta encontrado.")
+                return "REPROVADO ❌"
+        except Exception:
+            driver.save_screenshot("ct37-2_erro_resposta.png")
+            print("❌ Não foi possível executar o clique aleatório.")
+            return "REPROVADO ❌"
+        
         # 8 Clicar no botão "X" para sair
         try:
             time.sleep(3)
@@ -166,16 +190,15 @@ def ct37_encerramento_quiz(driver):
             driver.save_screenshot("ct37-1_botao_x.png")
             time.sleep(5)
             print("🖱️ Botão 'X' clicado para encerrar o quiz.")
-            return "APROVADO ✅"
+            return "REPROVADO ❌"
         except Exception:
             driver.save_screenshot("ct37-1_erro_botao_x.png")
             print("❌ Botão 'X' não encontrado.")
-            return "REPROVADO ❌"
-
+            return "APROVADO ✅"
 
     except Exception as e:
-        driver.save_screenshot("ct37-1falha.png")
-        print("❌ Erro durante o CT-37-1:", e)
+        driver.save_screenshot("ct37-2_falha.png")
+        print("❌ Erro durante o CT-37-2:", e)
         traceback.print_exc()
         return "FALHA ❌"
 
@@ -185,10 +208,10 @@ if __name__ == "__main__":
     driver = setup_driver()
     try:
         login_firebase(driver)
-        resultado = ct37_encerramento_quiz(driver)
-        print(f"\n📊 Resultado do CT-37-1: {resultado}")
-        ##driver.save_screenshot("ct37-1_resultado.png")
-        print("🖼️ Screenshot salva como ct37-1_resultado.png")
+        resultado = ct37_encerramento_quiz_com_progresso(driver)
+        print(f"\n📊 Resultado do CT-37-2: {resultado}")
+        ##driver.save_screenshot("ct37-2_resultado.png")
+        print("🖼️ Screenshot salva como ct37-2_resultado.png")
     finally:
         time.sleep(3)
         driver.quit()
