@@ -51,7 +51,7 @@ FBASE_VALUE = {
 # === Configuração do Selenium ===
 def setup_driver():
     options = webdriver.ChromeOptions()
-    options.add_argument("--start-maximized")
+    #options.add_argument("--start-maximized")
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     return driver
 
