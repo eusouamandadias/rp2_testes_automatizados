@@ -13,7 +13,7 @@ from tests.utils import load_credentials
 
 # Definindo constantes para o teste RF010
 DEFAULT_BROWSER = "chrome"  # Opções: "chrome", "chromium", "firefox", "webkit"
-BASE_URL = "https://testes.codefolio.com.br"
+BASE_URL = "https://testes-codefolio.web.app"
 COURSE_MANAGEMENT_URL = f"{BASE_URL}/manage-courses"  # Execution Step 01
 SLIDE_LESSON_TITLE = "Lição 1 - Preparando o ambiente para testar com Playwright"
 MODAL_CONFIRMATION_TEXT = f'Você tem certeza que deseja excluir "{SLIDE_LESSON_TITLE}"?'
@@ -21,8 +21,6 @@ MODAL_CONFIRMATION_TEXT = f'Você tem certeza que deseja excluir "{SLIDE_LESSON_
 # =================
 # ===== CT10-1 ====
 # =================
-
-
 def teste_rf010_cancelar_exclusao_slide():
     # Definindo o contexto Playwright
     with sync_playwright() as playwright:

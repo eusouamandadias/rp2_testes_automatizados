@@ -15,18 +15,55 @@ from tests.utils import load_credentials
 
 # Definindo constantes para o teste RF009
 DEFAULT_BROWSER = "chrome"  # Opções: "chrome", "chromium", "firefox", "webkit"
-BASE_URL = "https://testes.codefolio.com.br"
+BASE_URL = "https://testes-codefolio.web.app"
 COURSE_MANAGEMENT_URL = f"{BASE_URL}/manage-courses"
 NEW_SLIDE_TITLE = "Lição 1 - Preparando o ambiente para testar com Playwright"
 NEW_HTML_CODE = "https://docs.google.com/presentation/d/e/2PACX-1vSzcPobWyEazwXnAFux9eVqLFBMeC3yQuKbRvpgRO2OsAv34A4BJWfAXLfsDPl2vNYeUATNdVwnI4LI/pubembed?start=false&loop=false&delayms=30000"
 MESSAGE_TEXT = "O slide foi atualizado com sucesso!"
 TEMPO_DE_PAUSA = 3000
+NOME_DO_CURSO = "Testes Automatizados com Playwright"
 
-# =================
-# ===== CT09-1 ====
-# =================
-# Antes de começar o test rf009, precisamos verificar se o slide "Introdução ao Playwright" já existe e se não, criá-lo. Esse seria o CT08.
-def test_criando_novo_slide():
+# ===================================================
+# ===== CRIANDO CURSO E SLIDES QUANDO NECESSÁRIO ====
+# ===================================================
+def teste_criando_curso():
+    # Criar um contexto Playwright
+    with sync_playwright() as playwright:
+        # Inicializando o navegador
+        browser = playwright.chromium.launch(headless=False, channel=DEFAULT_BROWSER)
+
+        # Carregando credenciais de login armazenadas e criando uma nova página
+        credentials = load_credentials(playwright=playwright, browser=browser)
+        page = credentials["page"]
+
+        page.wait_for_timeout(TEMPO_DE_PAUSA)
+        # Accessar a página de gerenciamento de conteúdo do curso
+        print("\n\nIndo para a página de gerenciamento de cursos...\n")
+        page.goto(COURSE_MANAGEMENT_URL)
+        page.wait_for_timeout(TEMPO_DE_PAUSA)
+
+        # Verificar se o curso "Testes Automatizados com Playwright" já existe
+        curso_locator = page.get_by_text(NOME_DO_CURSO)
+
+        print("\n\nVerificando se o curso já existe...\n")
+        if curso_locator.count() == 0:
+            page.wait_for_timeout(TEMPO_DE_PAUSA)
+            page.get_by_role("button", name="Criar Novo Curso").click()
+            page.get_by_label("Título do Curso").fill(NOME_DO_CURSO)
+            page.wait_for_timeout(TEMPO_DE_PAUSA)
+            page.get_by_label("Descrição do Curso").fill(
+                "Curso Introdutório sobre testes automatizados utilizando a biblioteca Playwright."
+            )
+            page.wait_for_timeout(TEMPO_DE_PAUSA)
+            page.get_by_role("button", name="Salvar Curso").click()
+            expect(page.locator("h6#success-modal-title")).to_have_text(
+                "Curso criado com sucesso!"
+            )
+
+        expect(curso_locator).to_be_visible()
+
+
+def teste_criando_novo_slide():
     # Criar um contexto Playwright
     with sync_playwright() as playwright:
         # Inicializando o navegador
@@ -72,7 +109,8 @@ def test_criando_novo_slide():
 
             page.click('button:has-text("Adicionar Slide")')
             page.wait_for_timeout(5000)
-
+        # Poderia adicionar uma verificação aqui para garantir que o slide foi criado com sucesso, mas
+        # como este é um passo preparatório, vou deixar apenas o código de criação.
         # expect(
         #     page.locator("div.MuiPaper-root.MuiPaper-elevation2").filter(
         #         has_text="Introdução ao Playwright"
@@ -81,7 +119,7 @@ def test_criando_novo_slide():
 
 
 # =================
-# ===== CT09-2 ====
+# ===== CT09-1 ====
 # =================
 def teste_rf009_editar_slide_com_sucesso():
     # Criando um contexto Playwright
@@ -147,10 +185,8 @@ def teste_rf009_editar_slide_com_sucesso():
 
 
 # =================
-# ===== CT09-3 ====
+# ===== CT09-2 ====
 # =================
-
-
 def teste_rf009_editar_slide_falha_com_titulo_vazio():
     # Criando um contexto Playwright
     with sync_playwright() as playwright:
@@ -203,10 +239,8 @@ def teste_rf009_editar_slide_falha_com_titulo_vazio():
 
 
 # =================
-# ===== CT09-4 ====
+# ===== CT09-3 ====
 # =================
-
-
 def teste_rf009_editar_slide_falha_com_url_vazia():
     # Criando um contexto Playwright
     with sync_playwright() as playwright:

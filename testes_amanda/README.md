@@ -89,4 +89,5 @@ Estando no ambiente virtual do Poetry, podemos executar os testes utilizando vá
    - `pytest tests/ -v --html=report.html --self-contained-html`
 
 4. O pytest oculta as saídas de print dos testes que são bem-sucedidos por padrão.Para visualizar essas saídas, utilize a opção:
+
    - `pytest -s tests/test_rf009.py -k <NOME_DA_FUNCAO_DE_TESTE>`

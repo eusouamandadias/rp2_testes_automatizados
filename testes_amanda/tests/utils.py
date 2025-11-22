@@ -13,10 +13,10 @@ from playwright.sync_api import sync_playwright
 
 # Defining constants for the utility functions
 DEFAULT_BROWSER = "chrome"  # Options: "chrome", "chromium", "firefox", "webkit"
-DOMAIN = "https://testes.codefolio.com.br"
+DOMAIN = "https://testes-codefolio.web.app"
 LOGIN_URL = f"{DOMAIN}/login"
 RELOAD_INTERVAL = 1800  # Time in ms to force reload credentials (30 minutes)
-TIME_TO_LOGIN = 20000  # Time in ms to wait for manual login (20 seconds)
+TIME_TO_LOGIN = 50000  # Time in ms to wait for manual login (50 seconds)
 
 
 def load_credentials(playwright, browser):
@@ -52,9 +52,9 @@ def load_credentials(playwright, browser):
 
     if must_reload:
         # Accessing the login page
-        page.goto(LOGIN_URL)
 
         # Acessing the button that opens the login option
+
         page.click('button[id=":r0:"]')
 
         # Waiting for manual login before storing the credentials
